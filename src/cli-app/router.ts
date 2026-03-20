@@ -42,6 +42,11 @@ export function parseCommand(argv: string[]): ParsedCommand {
     return { group, command: 'api', method: undefined, args: [first, ...remaining] };
   }
 
+  // configure is handled directly at the top level
+  if (group === 'configure') {
+    return { group: 'configure', command: 'configure', method: undefined, args: rest };
+  }
+
   // Other groups: auth, company, help, etc.
   if (rest.length === 0) {
     return { group, command: group, method: undefined, args: [] };

@@ -153,7 +153,7 @@ class CallbackServer {
         `  1. ポート ${port} を使用しているプロセスを終了する\n` +
         `     (例: lsof -i :${port} でプロセスを確認)\n` +
         `  2. または、設定でポートを変更し、freee アプリのコールバックURLも更新する\n` +
-        `     (freee-mcp configure を実行して再設定)`
+        `     (freee configure を実行して再設定)`
       );
     }
 

@@ -1,16 +1,15 @@
 {
   "type": "module",
-  "name": "freee-mcp",
+  "name": "@yamitzky/freee",
   "version": "0.13.0",
   "bin": {
-    "freee-mcp": "./bin/cli.js",
     "freee": "./bin/freee.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "build": "bun run build.ts",
-    "start": "bun run src/index.ts",
-    "dev": "bun --watch run src/index.ts",
+    "start": "bun run src/cli-app/entry.ts",
+    "dev": "bun --watch run src/cli-app/entry.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint src/",
     "lint:fix": "biome lint --write src/",
@@ -57,7 +56,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/freee/freee-mcp.git"
+    "url": "https://github.com/yamitzky/freee-mcp.git"
   },
   "files": [
     "dist/",

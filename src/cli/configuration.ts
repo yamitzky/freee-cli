@@ -27,6 +27,6 @@ export async function saveConfig(
 
   await saveFullConfig(fullConfig);
   console.log('設定情報を保存しました。\n');
-  console.log('認証情報は ~/.config/freee-mcp/config.json に保存されました。');
-  console.log('トークンは ~/.config/freee-mcp/tokens.json に保存されました。\n');
+  console.log('認証情報は ~/.config/freee-cli/config.json に保存されました。');
+  console.log('トークンは ~/.config/freee-cli/tokens.json に保存されました。\n');
 }

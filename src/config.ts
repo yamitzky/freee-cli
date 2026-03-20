@@ -66,7 +66,7 @@ function hasEnvCredentials(): boolean {
   if (hasClientId && !hasClientSecret) {
     throw new Error(
       '環境変数 FREEE_CLIENT_SECRET が設定されていません。\n' +
-      '`freee-mcp configure` を実行して設定ファイルへ移行することを推奨します。\n' +
+      '`freee configure` を実行して設定ファイルへ移行することを推奨します。\n' +
       '環境変数を使う場合は FREEE_CLIENT_ID と FREEE_CLIENT_SECRET の両方を設定してください。'
     );
   }
@@ -74,7 +74,7 @@ function hasEnvCredentials(): boolean {
   if (!hasClientId && hasClientSecret) {
     throw new Error(
       '環境変数 FREEE_CLIENT_ID が設定されていません。\n' +
-      '`freee-mcp configure` を実行して設定ファイルへ移行することを推奨します。\n' +
+      '`freee configure` を実行して設定ファイルへ移行することを推奨します。\n' +
       '環境変数を使う場合は FREEE_CLIENT_ID と FREEE_CLIENT_SECRET の両方を設定してください。'
     );
   }
@@ -101,7 +101,7 @@ export async function loadConfig(): Promise<Config> {
   if (hasEnvCredentials()) {
     // Environment variables take priority (with deprecation warning)
     console.error('Warning: 環境変数での認証情報設定は非推奨です。');
-    console.error('  `freee-mcp configure` を実行して設定ファイルに移行してください。');
+    console.error('  `freee configure` を実行して設定ファイルに移行してください。');
     console.error('  環境変数設定は将来のバージョンで削除される予定です。\n');
 
     clientId = process.env.FREEE_CLIENT_ID || '';
@@ -112,7 +112,7 @@ export async function loadConfig(): Promise<Config> {
     if (!fullConfig.clientId || !fullConfig.clientSecret) {
       throw new Error(
         '認証情報が設定されていません。\n' +
-        '`freee-mcp configure` を実行してセットアップしてください。'
+        '`freee configure` を実行してセットアップしてください。'
       );
     }
 
@@ -138,7 +138,7 @@ export async function loadConfig(): Promise<Config> {
     server: {
       name: 'freee',
       version: packageVersion,
-      instructions: 'freee APIと連携するCLI & Agent Skill。会計・人事労務・請求書・工数管理・販売APIをサポート。詳細ガイドはfreee-api-skill skillを参照。skillが未インストールの場合は npx skills add freee/freee-mcp で追加',
+      instructions: 'freee APIと連携するCLI & Agent Skill。会計・人事労務・請求書・工数管理・販売APIをサポート。詳細ガイドはfreee-api-skill skillを参照。skillが未インストールの場合は npx skills add freee/freee-mcp で追加。',
     },
     auth: {
       timeoutMs: AUTH_TIMEOUT_MS,

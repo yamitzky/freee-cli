@@ -37,8 +37,8 @@ freee API CLI & Agent Skill:
 
 ### CLI Subcommands
 
-- `freee-mcp configure` - OAuth認証と事業所の対話式セットアップ
-- `freee-mcp configure --force` - 保存済みのログイン情報をリセットして再設定
+- `freee configure` - OAuth認証と事業所の対話式セットアップ
+- `freee configure --force` - 保存済みのログイン情報をリセットして再設定
 - `freee <service> ls [filter]` - エンドポイント一覧
 - `freee <service> docs <path>` - API ドキュメント
 - `freee <service> help <path>` - メソッド一覧
@@ -49,8 +49,8 @@ freee API CLI & Agent Skill:
 
 ### Configuration
 
-`freee-mcp configure` で OAuth 認証情報と事業所の設定を行う。
-設定は `~/.config/freee-mcp/config.json` に保存される。
+`freee configure` で OAuth 認証情報と事業所の設定を行う。
+設定は `~/.config/freee-cli/config.json` に保存される。
 
 Development mode: `bun run src/cli-app/entry.ts` で CLI を直接実行可能。
 
@@ -76,7 +76,7 @@ Changeset requirement (必須):
 
 - コミット時に changeset ファイルを必ず作成すること（忘れやすいので注意）
 - `bun run changeset` が対話モードで使えない場合は `.changeset/<短い説明>.md` を直接作成する
-- フォーマット: frontmatter に `"freee-mcp": patch|minor|major`、本文に変更内容の説明（日本語）
+- フォーマット: frontmatter に `"@yamitzky/freee": patch|minor|major`、本文に変更内容の説明（日本語）
 - bump type: `patch`（バグ修正）、`minor`（新機能）、`major`（破壊的変更）
 
 Contributor の追加:

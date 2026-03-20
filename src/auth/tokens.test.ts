@@ -77,7 +77,7 @@ describe('tokens', () => {
 
       await saveTokens(mockTokenData);
 
-      // XDG_CONFIG_HOMEが設定されている場合、パスは $XDG_CONFIG_HOME/freee-mcp
+      // XDG_CONFIG_HOMEが設定されている場合、パスは $XDG_CONFIG_HOME/freee-cli
       const expectedConfigDir = path.join(tempDir.getPath(), APP_NAME);
       const expectedTokenPath = path.join(expectedConfigDir, 'tokens.json');
 
@@ -217,7 +217,7 @@ describe('tokens', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': expect.stringMatching(/^freee-mcp\//),
+          'User-Agent': expect.stringMatching(/^freee-cli\//),
         },
         body: new URLSearchParams({
           grant_type: 'refresh_token',

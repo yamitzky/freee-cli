@@ -1,5 +1,5 @@
 /**
- * Centralized constants for freee-mcp
+ * Centralized constants for freee-cli
  *
  * This file consolidates magic numbers and hardcoded values that are used
  * across multiple files in the codebase.
@@ -11,13 +11,13 @@ import os from 'node:os';
 /**
  * Application name used for configuration directory
  */
-export const APP_NAME = 'freee-mcp';
+export const APP_NAME = 'freee-cli';
 
 /**
  * Get the configuration directory path.
  * Respects XDG Base Directory specification:
  * - Uses XDG_CONFIG_HOME if set
- * - Falls back to ~/.config/freee-mcp
+ * - Falls back to ~/.config/freee-cli
  */
 export function getConfigDir(): string {
   return process.env.XDG_CONFIG_HOME
@@ -46,7 +46,7 @@ export const CONFIG_FILE_PERMISSION = 0o600;
 export const FREEE_API_URL = 'https://api.freee.co.jp';
 
 /**
- * Package version for freee-mcp
+ * Package version for freee-cli
  * Injected at build time from package.json via Bun.build define
  * Falls back to 'dev' for development/test environments
  */
@@ -58,4 +58,4 @@ const PACKAGE_VERSION = typeof __PACKAGE_VERSION__ !== 'undefined' ? __PACKAGE_V
  * Format follows RFC 7231: ProductName/Version (comments)
  * @see https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
  */
-export const USER_AGENT = `freee-mcp/${PACKAGE_VERSION} (CLI; +https://github.com/freee/freee-mcp)`;
+export const USER_AGENT = `freee-cli/${PACKAGE_VERSION} (CLI; +https://github.com/yamitzky/freee-mcp)`;

@@ -1,4 +1,5 @@
 import { loadConfig } from '../config.js';
+import { configure } from '../cli.js';
 import type { ApiType } from '../openapi/schema-loader.js';
 import { generateDocs, generateHelp, generateSpec } from './api-docs.js';
 import { executeApiRequest } from './api-exec.js';
@@ -14,6 +15,10 @@ function printUsage(): void {
   console.log(`freee CLI v${__PACKAGE_VERSION__}
 
 Usage: freee <command> [options]
+
+Setup:
+  freee configure           OAuth認証と事業所の設定を対話式で行います
+  freee configure --force   保存済みのログイン情報をリセットして再設定
 
 Auth:
   freee auth login          freee にログイン
@@ -85,6 +90,12 @@ export async function main(argv: string[]): Promise<void> {
   const parsed = parseCommand(argv);
 
   switch (parsed.group) {
+    case 'configure': {
+      const force = argv.includes('--force');
+      await configure({ force });
+      break;
+    }
+
     case 'auth':
       await loadConfig();
       console.log(await handleAuth(parsed.command));

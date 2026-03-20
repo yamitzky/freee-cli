@@ -23,7 +23,7 @@ async function clearConfig(): Promise<void> {
 }
 
 export async function configure(options: ConfigureOptions = {}): Promise<void> {
-  console.log('\n=== freee-mcp Configuration Setup ===\n');
+  console.log('\n=== freee Configuration Setup ===\n');
 
   if (options.force) {
     console.log('保存済みのログイン情報をリセットしています...');
@@ -32,7 +32,7 @@ export async function configure(options: ConfigureOptions = {}): Promise<void> {
     console.log('リセットが完了しました。\n');
   }
 
-  console.log('このウィザードでは、freee-mcpの設定と認証を対話式で行います。');
+  console.log('このウィザードでは、freee CLIの設定と認証を対話式で行います。');
   console.log('freee OAuth認証情報が必要です。\n');
 
   try {
