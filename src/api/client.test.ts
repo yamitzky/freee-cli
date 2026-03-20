@@ -234,7 +234,7 @@ describe('client', () => {
       await setupAccessToken(null);
 
       await expect(makeApiRequest('GET', '/api/1/users/me')).rejects.toThrow(
-        '認証が必要です。freee_authenticate ツールを使用して認証を行ってください。'
+        '認証が必要です。freee auth login で認証を行ってください。'
       );
     });
 
@@ -243,7 +243,7 @@ describe('client', () => {
       mockFetch.mockResolvedValue(createErrorResponse(401, { error: 'invalid_token' }));
 
       await expect(makeApiRequest('GET', '/api/1/users/me')).rejects.toThrow(
-        '認証エラーが発生しました。freee_authenticate ツールを使用して再認証を行ってください。'
+        '認証エラーが発生しました。freee auth login で再認証を行ってください。'
       );
     });
 

@@ -258,7 +258,7 @@ export function validatePathForService(
     }
     return {
       isValid: false,
-      message: `Path '${path}' not found in ${config.name} schema. Please check the path format or use freee_api_list_paths to see available endpoints.`,
+      message: `Path '${path}' not found in ${config.name} schema. Please check the path format or freee <service> ls で利用可能なエンドポイントを確認してください。`,
     };
   }
 
@@ -273,7 +273,7 @@ export function validatePathForService(
   // Path not found in any API
   return {
     isValid: false,
-    message: `Path '${path}' not found in any freee API schema. Please check the path format or use freee_api_list_paths to see available endpoints.`,
+    message: `Path '${path}' not found in any freee API schema. Please check the path format or freee <service> ls で利用可能なエンドポイントを確認してください。`,
   };
 }
 

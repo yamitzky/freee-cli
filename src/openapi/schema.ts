@@ -49,11 +49,11 @@ export function convertPathToToolName(path: string): string {
 }
 
 export function sanitizePropertyName(name: string): string {
-  // MCP property names must match pattern '^[a-zA-Z0-9_.-]{1,64}$'
+  // Property names must match pattern '^[a-zA-Z0-9_.-]{1,64}$'
   const sanitized = name
     .replace(/[^a-zA-Z0-9_.-]/g, '_') // Replace invalid characters with underscore
     .substring(0, 64); // Limit to 64 characters
 
-  // Ensure non-empty result (MCP requires at least 1 character)
+  // Ensure non-empty result (at least 1 character required)
   return sanitized || '_';
 }

@@ -67,7 +67,7 @@ export async function uploadReceipt(
 
   if (!accessToken) {
     throw new Error(
-      `認証が必要です。freee_authenticate ツールを使用して認証を行ってください。\n` +
+      `認証が必要です。freee auth login で認証を行ってください。\n` +
       `現在の事業所ID: ${companyId}`
     );
   }
@@ -115,7 +115,7 @@ export async function uploadReceipt(
   if (response.status === 401) {
     const errorInfo = await formatResponseErrorInfo(response);
     throw new Error(
-      `認証エラーが発生しました。freee_authenticate ツールを使用して再認証を行ってください。\n` +
+      `認証エラーが発生しました。freee auth login で再認証を行ってください。\n` +
       `現在の事業所ID: ${companyId}\n` +
       `エラー詳細: ${response.status} ${errorInfo}`
     );

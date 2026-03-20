@@ -82,7 +82,7 @@ export async function makeApiRequest(
 
   if (!accessToken) {
     throw new Error(
-      `認証が必要です。freee_authenticate ツールを使用して認証を行ってください。\n` +
+      `認証が必要です。freee auth login で認証を行ってください。\n` +
       `現在の事業所ID: ${companyId}`
     );
   }
@@ -104,7 +104,7 @@ export async function makeApiRequest(
   if (paramsCompanyId !== undefined && String(paramsCompanyId) !== String(companyId)) {
     throw new Error(
       `company_id の不整合: リクエストの company_id (${paramsCompanyId}) と現在の事業所 (${companyId}) が異なります。\n` +
-      `freee_set_current_company で事業所を切り替えるか、リクエストの company_id を修正してください。`
+      `freee company set <id> で事業所を切り替えるか、リクエストの company_id を修正してください。`
     );
   }
 
@@ -113,7 +113,7 @@ export async function makeApiRequest(
   if (bodyCompanyId !== undefined && String(bodyCompanyId) !== String(companyId)) {
     throw new Error(
       `company_id の不整合: リクエストボディの company_id (${bodyCompanyId}) と現在の事業所 (${companyId}) が異なります。\n` +
-      `freee_set_current_company で事業所を切り替えるか、リクエストの company_id を修正してください。`
+      `freee company set <id> で事業所を切り替えるか、リクエストの company_id を修正してください。`
     );
   }
 
@@ -130,13 +130,13 @@ export async function makeApiRequest(
   if (response.status === 401) {
     const errorInfo = await formatResponseErrorInfo(response);
     throw new Error(
-      `認証エラーが発生しました。freee_authenticate ツールを使用して再認証を行ってください。\n` +
+      `認証エラーが発生しました。freee auth login で再認証を行ってください。\n` +
       `現在の事業所ID: ${companyId}\n` +
       `エラー詳細: ${response.status} ${errorInfo}\n\n` +
       `確認事項:\n` +
       `1. freee側でアプリケーション設定が正しいか（リダイレクトURI等）\n` +
       `2. トークンの有効期限が切れていないか\n` +
-      `3. 事業所IDが正しいか（freee_get_current_company で確認）`
+      `3. 事業所IDが正しいか（freee company current で確認）`
     );
   }
 
@@ -146,7 +146,7 @@ export async function makeApiRequest(
       `アクセス拒否 (403): ${errorInfo}\n` +
       `事業所ID: ${companyId}\n\n` +
       `レートリミットの可能性があります。数分待ってから再試行してください。\n` +
-      `それでも解決しない場合は、アプリの権限設定を確認するか、freee_authenticate で再認証してください。`
+      `それでも解決しない場合は、アプリの権限設定を確認するか、freee auth login で再認証してください。`
     );
   }
 

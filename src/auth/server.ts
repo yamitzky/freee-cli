@@ -136,7 +136,7 @@ class CallbackServer {
 
   async start(): Promise<void> {
     if (this.server) {
-      console.error('OAuth callback server is already running. If authentication is not working, try restarting the MCP server.');
+      console.error('OAuth callback server is already running. If authentication is not working, try running freee auth login again.');
       return;
     }
 
@@ -169,7 +169,7 @@ class CallbackServer {
           this.handleCallback(url, res);
         } else if (url.pathname === '/') {
           res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-          res.end('<h1>freee MCP OAuth Server</h1><p>コールバックサーバーが稼働中です。</p>');
+          res.end('<h1>freee OAuth Server</h1><p>コールバックサーバーが稼働中です。</p>');
         } else {
           res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
           res.end('<h1>404 Not Found</h1><p>このパスは存在しません。</p>');

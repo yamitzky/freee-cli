@@ -80,7 +80,7 @@ export async function formatApiErrorMessage(response: Response, statusCode: numb
         if (statusCode === 400) {
           errorMessage += `\n\nヒント: 不正なリクエストエラーが発生しました。`;
           errorMessage += `\n既存のデータを取得して正しい構造を確認することをお勧めします。`;
-          errorMessage += `\n例: freee_api_get で既存データを取得し、正しい構造を確認してください。`;
+          errorMessage += `\n例: freee <service> get <path> で既存データを取得し、正しい構造を確認してください。`;
         }
       }
     }
