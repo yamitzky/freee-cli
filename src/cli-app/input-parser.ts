@@ -32,13 +32,14 @@ function parseBracketKeys(raw: string): (string | number)[] {
   return keys;
 }
 
-export function parseApiInput(args: string[]): ApiInput {
+export function parseApiInput(args: string[], methodOverride?: string): ApiInput {
   if (args.length === 0) {
-    return { path: '', method: undefined, query: {}, body: undefined, flags: [] };
+    return { path: '', method: methodOverride, query: {}, body: undefined, flags: [] };
   }
 
   const path = args[0];
   let method: string | undefined;
+  let hasExplicitMethod = false;
   const query: Record<string, string> = {};
   let body: Record<string, unknown> | undefined;
   const flags: string[] = [];
@@ -50,6 +51,7 @@ export function parseApiInput(args: string[]): ApiInput {
     // -X METHOD
     if (arg === '-X' && i + 1 < args.length) {
       method = args[i + 1].toUpperCase();
+      hasExplicitMethod = true;
       i += 2;
       continue;
     }
@@ -108,6 +110,11 @@ export function parseApiInput(args: string[]): ApiInput {
 
     // Unknown arg, skip
     i++;
+  }
+
+  // If no explicit -X flag, use methodOverride if provided
+  if (!hasExplicitMethod && methodOverride !== undefined) {
+    method = methodOverride;
   }
 
   return { path, method, query, body, flags };

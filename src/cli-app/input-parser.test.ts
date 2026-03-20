@@ -164,4 +164,48 @@ describe('parseApiInput', () => {
       flags: [],
     });
   });
+
+  it('should use methodOverride when no -X flag is provided', () => {
+    const result = parseApiInput(['/api/1/deals'], 'GET');
+    expect(result).toEqual({
+      path: '/api/1/deals',
+      method: 'GET',
+      query: {},
+      body: undefined,
+      flags: [],
+    });
+  });
+
+  it('should use methodOverride for DELETE', () => {
+    const result = parseApiInput(['/api/1/deals/123'], 'DELETE');
+    expect(result).toEqual({
+      path: '/api/1/deals/123',
+      method: 'DELETE',
+      query: {},
+      body: undefined,
+      flags: [],
+    });
+  });
+
+  it('should let -X flag take precedence over methodOverride', () => {
+    const result = parseApiInput(['/api/1/deals/123', '-X', 'DELETE'], 'GET');
+    expect(result).toEqual({
+      path: '/api/1/deals/123',
+      method: 'DELETE',
+      query: {},
+      body: undefined,
+      flags: [],
+    });
+  });
+
+  it('should use methodOverride when empty args', () => {
+    const result = parseApiInput([], 'POST');
+    expect(result).toEqual({
+      path: '',
+      method: 'POST',
+      query: {},
+      body: undefined,
+      flags: [],
+    });
+  });
 });

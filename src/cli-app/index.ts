@@ -27,28 +27,33 @@ Company:
 
 API:
   freee <service> ls [filter]           エンドポイント一覧（filterで絞込可）
-  freee <service> <resource>            GET リクエスト（ショートハンド）
-  freee <service> <resource> --help     エンドポイントの詳細を表示
-  freee <service> <resource> --docs     コンパクトなAPIドキュメントを表示
-  freee <service> <resource> --spec     生の OpenAPI スキーマを表示
-  freee <service> <resource> key==val   クエリパラメータ付き GET
-  freee <service> <resource> key=val    ボディパラメータ付き POST
-  freee <service> <resource> key:=json  JSON 値のボディパラメータ付き POST
-  freee <service> <resource> -X METHOD  HTTP メソッドを指定
-  freee <service> <resource> -d '{}'    JSON ボディを直接指定
-  freee <service> <resource> --json     レスポンスを生JSONで表示
-  freee <service> <resource> --max=N    表示件数（デフォルト: 10）
+  freee <service> get <path>            GET リクエスト
+  freee <service> post <path>           POST リクエスト
+  freee <service> put <path>            PUT リクエスト
+  freee <service> delete <path>         DELETE リクエスト
+  freee <service> patch <path>          PATCH リクエスト
+  freee <service> docs <path>           コンパクトなAPIドキュメントを表示
+  freee <service> help <path>           エンドポイントの詳細を表示
+  freee <service> spec <path>           生の OpenAPI スキーマを表示
 
-  resource: deals, approval_requests, partners, etc. (/api/1/ は省略可)
   service: accounting, hr, invoice, pm, sm
+  path: deals, approval_requests, partners, etc. (/api/1/ は省略可)
+
+  Input syntax:
+    key==val    クエリパラメータ
+    key=val     ボディパラメータ（文字列）
+    key:=json   ボディパラメータ（JSON値）
+    -d '{}'     JSON ボディを直接指定
+    --json      レスポンスを生JSONで表示
+    --max=N     表示件数（デフォルト: 10）
 
 Options:
   --version                 バージョンを表示
   --help                    ヘルプを表示`);
 }
 
-async function handleApiCommand(service: ApiType, args: string[]): Promise<void> {
-  const input = parseApiInput(args);
+async function handleApiCommand(service: ApiType, method: string | undefined, args: string[]): Promise<void> {
+  const input = parseApiInput(args, method);
   if (input.flags.includes('--help')) {
     console.log(generateHelp(service, input.path));
     return;
@@ -98,8 +103,14 @@ export async function main(argv: string[]): Promise<void> {
       const service = parsed.group as ApiType;
       if (parsed.command === 'ls') {
         console.log(listEndpoints(service, parsed.args[0]));
+      } else if (parsed.command === 'docs') {
+        console.log(generateDocs(service, parsed.args[0], parsed.args[1]));
+      } else if (parsed.command === 'help') {
+        console.log(generateHelp(service, parsed.args[0]));
+      } else if (parsed.command === 'spec') {
+        console.log(generateSpec(service, parsed.args[0]));
       } else if (parsed.command === 'api') {
-        await handleApiCommand(service, parsed.args);
+        await handleApiCommand(service, parsed.method, parsed.args);
       } else {
         console.error(`Unknown command: ${parsed.command}`);
         printUsage();
