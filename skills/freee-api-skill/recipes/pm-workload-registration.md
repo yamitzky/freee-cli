@@ -26,11 +26,8 @@ PM側の person_id と HR側の employee_id を紐付けます。
 
 #### 1-1. PM側のログインユーザー情報を取得
 
-```
-freee_api_get {
-  "service": "pm",
-  "path": "/users/me"
-}
+```bash
+freee pm get users/me
 ```
 
 レスポンスの `companies[].person_me.id` がPM側の person_id です。
@@ -40,29 +37,16 @@ freee_api_get {
 
 方法A: PM `/people` の payroll_employee_id を使う
 
-```
-freee_api_get {
-  "service": "pm",
-  "path": "/people",
-  "query": {
-    "company_id": 123456,
-    "person_ids[]": [1]
-  }
-}
+```bash
+freee pm get people company_id==123456 "person_ids[]==1"
 ```
 
 レスポンスの `people[].payroll_employee_id` が HR の employee_id に対応します。
 
 方法B: HR `/api/v1/users/me` から直接取得
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/users/me",
-  "query": {
-    "company_id": 123456
-  }
-}
+```bash
+freee hr get users/me company_id==123456
 ```
 
 レスポンスの `companies[].employee_id` が HR の employee_id です。
@@ -74,14 +58,8 @@ self_only 権限の詳細は `recipes/hr-attendance-operations.md` の「self_on
 
 対象日の勤怠記録を取得して、工数登録が可能かチェックします。
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/employees/{employee_id}/work_records/2025-03-10",
-  "query": {
-    "company_id": 123456
-  }
-}
+```bash
+freee hr get employees/{employee_id}/work_records/2025-03-10 company_id==123456
 ```
 
 レスポンスのフィールドを「安全チェック一覧」テーブルに基づいて確認し、すべてのチェックを通過した場合のみ次のステップに進みます。

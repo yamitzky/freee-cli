@@ -6,8 +6,8 @@ freee工数管理APIを使ったプロジェクト・工数の管理ガイド。
 
 すべてのエンドポイントで `company_id` が必須です。
 
-- GETリクエスト: `query` に `company_id` を含める
-- POSTリクエスト: `body` に `company_id` を含める
+- GETリクエスト: クエリパラメータに `company_id` を含める（`company_id==123456`）
+- POSTリクエスト: ボディに `company_id` を含める（`company_id:=123456` または `-d '{...}'`）
 
 ## 利用可能なパス
 
@@ -27,73 +27,45 @@ freee工数管理APIを使ったプロジェクト・工数の管理ガイド。
 
 ### プロジェクト一覧を取得
 
-```
-freee_api_get {
-  "service": "pm",
-  "path": "/projects",
-  "query": {
-    "company_id": 123456
-  }
-}
+```bash
+freee pm get projects company_id==123456
 ```
 
 ### プロジェクトを作成
 
-```
-freee_api_post {
-  "service": "pm",
-  "path": "/projects",
-  "body": {
-    "company_id": 123456,
-    "name": "新規プロジェクト",
-    "code": "PJ-001",
-    "from_date": "2025-04-01",
-    "thru_date": "2025-12-31",
-    "pm_budgets_cost": 5000
-  }
-}
+```bash
+freee pm post projects -d '{
+  "company_id": 123456,
+  "name": "新規プロジェクト",
+  "code": "PJ-001",
+  "from_date": "2025-04-01",
+  "thru_date": "2025-12-31",
+  "pm_budgets_cost": 5000
+}'
 ```
 
 ### 工数を登録
 
-```
-freee_api_post {
-  "service": "pm",
-  "path": "/workloads",
-  "body": {
-    "company_id": 123456,
-    "project_id": 1,
-    "date": "2025-03-10",
-    "minutes": 120,
-    "memo": "設計作業"
-  }
-}
+```bash
+freee pm post workloads -d '{
+  "company_id": 123456,
+  "project_id": 1,
+  "date": "2025-03-10",
+  "minutes": 120,
+  "memo": "設計作業"
+}'
 ```
 
 ### 工数実績を取得
 
-```
-freee_api_get {
-  "service": "pm",
-  "path": "/workloads",
-  "query": {
-    "company_id": 123456,
-    "year_month": "2025-03"
-  }
-}
+```bash
+freee pm get workloads company_id==123456 year_month==2025-03
 ```
 
 ### 工数サマリを取得
 
-```
-freee_api_get {
-  "service": "pm",
-  "path": "/workload_summaries",
-  "query": {
-    "company_id": 123456,
-    "year_month": "2025-03"
-  }
-}
+```bash
+freee pm get workload_summaries company_id==123456 year_month==2025-03
 ```
 
 ## Tips

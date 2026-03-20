@@ -29,39 +29,22 @@ freee人事労務APIを使った従業員・勤怠管理ガイド。
 
 対象年月を指定して取得:
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/employees",
-  "query": {
-    "year": 2025,
-    "month": 1
-  }
-}
+```bash
+freee hr get employees year:=2025 month:=1
 ```
 
 ### 全期間の従業員一覧を取得
 
 退職者も含めて取得:
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/companies/123456/employees"
-}
+```bash
+freee hr get companies/123456/employees
 ```
 
 ### 給与明細一覧を取得
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/payroll_statements",
-  "query": {
-    "year": 2025,
-    "month": 1
-  }
-}
+```bash
+freee hr get payroll_statements year:=2025 month:=1
 ```
 
 ## Tips
@@ -80,15 +63,8 @@ freee_api_get {
 
 例: 2025年1月の情報を取得する場合
 
-```
-freee_api_get {
-  "service": "hr",
-  "path": "/api/v1/employees",
-  "query": {
-    "year": 2024,
-    "month": 12
-  }
-}
+```bash
+freee hr get employees year:=2024 month:=12
 ```
 
 ## 注意点

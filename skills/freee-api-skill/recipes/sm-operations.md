@@ -6,7 +6,7 @@ freee販売APIを使った案件・受注の管理ガイド。
 
 データ作成時に `company_id` が必須です。
 
-- POSTリクエスト: `body` に `company_id` を含める
+- POSTリクエスト: ボディに `company_id` を含める（`-d '{...}'` または `company_id:=123456`）
 
 ## 利用可能なパス
 
@@ -21,87 +21,57 @@ freee販売APIを使った案件・受注の管理ガイド。
 
 ### 案件一覧を取得
 
-```
-freee_api_get {
-  "service": "sm",
-  "path": "/businesses"
-}
+```bash
+freee sm get businesses
 ```
 
 ### 案件詳細を取得
 
-```
-freee_api_get {
-  "service": "sm",
-  "path": "/businesses/1"
-}
+```bash
+freee sm get businesses/1
 ```
 
 ### 案件を作成
 
-```
-freee_api_post {
-  "service": "sm",
-  "path": "/businesses",
-  "body": {
-    "company_id": 123456,
-    "name": "新規案件"
-  }
-}
+```bash
+freee sm post businesses company_id:=123456 name=新規案件
 ```
 
 ### 案件を更新
 
-```
-freee_api_patch {
-  "service": "sm",
-  "path": "/businesses/1",
-  "body": {
-    "name": "案件名変更",
-    "internal_memo": "メモ更新"
-  }
-}
+```bash
+freee sm patch businesses/1 name=案件名変更 internal_memo=メモ更新
 ```
 
 ### 受注一覧を取得
 
-```
-freee_api_get {
-  "service": "sm",
-  "path": "/sales_orders"
-}
+```bash
+freee sm get sales_orders
 ```
 
 ### 受注詳細を取得
 
-```
-freee_api_get {
-  "service": "sm",
-  "path": "/sales_orders/1"
-}
+```bash
+freee sm get sales_orders/1
 ```
 
 ### 受注を作成
 
-```
-freee_api_post {
-  "service": "sm",
-  "path": "/sales_orders",
-  "body": {
-    "company_id": 123456,
-    "sales_order_date": "2025-03-10",
-    "customer_id": 1,
-    "billing_partner_id": 1,
-    "collecting_partner_id": 1,
-    "lines": [
-      {
-        "name": "商品A",
-        "unit_price": 10000,
-        "quantity": 1
-      }
-    ]
-  }
-}
+```bash
+freee sm post sales_orders -d '{
+  "company_id": 123456,
+  "sales_order_date": "2025-03-10",
+  "customer_id": 1,
+  "billing_partner_id": 1,
+  "collecting_partner_id": 1,
+  "lines": [
+    {
+      "name": "商品A",
+      "unit_price": 10000,
+      "quantity": 1
+    }
+  ]
+}'
 ```
 
 ## Tips

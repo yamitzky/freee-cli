@@ -18,46 +18,32 @@ freee会計APIを使った経費申請のガイド。
 
 ### 経費申請一覧を取得
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/expense_applications",
-  "query": {
-    "limit": 10
-  }
-}
+```bash
+freee accounting get expense_applications limit==10
 ```
 
 ### 経費申請を作成
 
-```
-freee_api_post {
-  "service": "accounting",
-  "path": "/api/1/expense_applications",
-  "body": {
-    "company_id": 123456,
-    "title": "交通費",
-    "issue_date": "2025-01-15",
-    "expense_application_lines": [
-      {
-        "transaction_date": "2025-01-15",
-        "description": "新宿→渋谷",
-        "amount": 400
-      }
-    ]
-  }
-}
+```bash
+freee accounting post expense_applications -d '{
+  "title": "交通費",
+  "issue_date": "2025-01-15",
+  "expense_application_lines": [
+    {
+      "transaction_date": "2025-01-15",
+      "description": "新宿→渋谷",
+      "amount": 400
+    }
+  ]
+}'
 ```
 
 ### 経費科目一覧を取得
 
 経費申請作成時に使用する経費科目IDを確認:
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/expense_application_line_templates"
-}
+```bash
+freee accounting get expense_application_line_templates
 ```
 
 ## Tips

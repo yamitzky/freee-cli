@@ -111,12 +111,9 @@ freee_set_current_company { "company_id": 12345 }
 
 解決方法:
 
-```
+```bash
 # 有効な経費科目IDを確認
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/expense_application_line_templates"
-}
+freee accounting get expense_application_line_templates
 ```
 
 詳細: 各事業所で利用可能な経費科目は異なります。必ず事前に確認してください。
@@ -197,25 +194,18 @@ freee_api_get {
 
 解決方法:
 
-```
+```bash
 # 部門一覧を確認
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/sections"
-}
+freee accounting get sections
 ```
 
 ### 問題: 申請作成後に内容を確認したい
 
 解決方法:
 
-```
+```bash
 # 最近の申請を確認
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/expense_applications",
-  "query": { "limit": 10 }
-}
+freee accounting get expense_applications limit==10
 ```
 
 Web画面での確認: `https://secure.freee.co.jp/expense_applications/{id}`
@@ -234,12 +224,11 @@ Web画面での確認: `https://secure.freee.co.jp/expense_applications/{id}`
 ```
 # 現在の事業所を確認
 freee_get_current_company
+```
 
+```bash
 # 経費科目を取得
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/expense_application_line_templates"
-}
+freee accounting get expense_application_line_templates
 ```
 
 ### 問題: "経費科目が多すぎてどれを選べばいいかわからない"

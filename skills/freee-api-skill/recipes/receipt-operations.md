@@ -19,7 +19,7 @@ freee会計APIとカスタムツールを使ったファイルボックスの操
 ### カスタムツール freee_file_upload を使う（推奨）
 
 ローカルファイルをファイルボックスにアップロードするには、カスタムツール `freee_file_upload` を使います。
-APIの `POST /api/1/receipts` は multipart/form-data が必要なため、通常の `freee_api_post` では利用できません。
+APIの `POST /api/1/receipts` は multipart/form-data が必要なため、通常の `freee accounting post` では利用できません。
 
 ```
 freee_file_upload {
@@ -48,51 +48,34 @@ freee_file_upload {
 
 ### 証憑ファイル一覧を取得
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/receipts",
-  "query": {
-    "start_date": "2025-01-01",
-    "end_date": "2025-01-31"
-  }
-}
+```bash
+freee accounting get receipts start_date==2025-01-01 end_date==2025-01-31
 ```
 
 ### 特定の証憑ファイルを取得
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/receipts/432228305"
-}
+```bash
+freee accounting get receipts/432228305
 ```
 
 ### 証憑ファイルのメタ情報を更新
 
-```
-freee_api_put {
-  "service": "accounting",
-  "path": "/api/1/receipts/432228305",
-  "body": {
-    "description": "ファミリーマート 一の橋店 レシート",
-    "receipt_metadatum": {
-      "partner_name": "ファミリーマート",
-      "issue_date": "2024-09-29",
-      "amount": 460
-    },
-    "document_type": "receipt"
-  }
-}
+```bash
+freee accounting put receipts/432228305 -d '{
+  "description": "ファミリーマート 一の橋店 レシート",
+  "receipt_metadatum": {
+    "partner_name": "ファミリーマート",
+    "issue_date": "2024-09-29",
+    "amount": 460
+  },
+  "document_type": "receipt"
+}'
 ```
 
 ### 証憑ファイルを削除
 
-```
-freee_api_delete {
-  "service": "accounting",
-  "path": "/api/1/receipts/432228305"
-}
+```bash
+freee accounting delete receipts/432228305
 ```
 
 ## Tips

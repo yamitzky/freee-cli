@@ -28,38 +28,30 @@ freee請求書APIを使った帳票操作のガイド。
 
 請求書一覧を取得:
 
-```
-freee_api_get {
-  "service": "invoice",
-  "path": "/invoices",
-  "query": { "company_id": 123456 }
-}
+```bash
+freee invoice get invoices company_id==123456
 ```
 
 請求書を作成:
 
-```
-freee_api_post {
-  "service": "invoice",
-  "path": "/invoices",
-  "body": {
-    "company_id": 123456,
-    "billing_date": "2025-01-15",
-    "partner_id": 789,
-    "partner_title": "御中",
-    "tax_entry_method": "out",
-    "tax_fraction": "omit",
-    "withholding_tax_entry_method": "out",
-    "lines": [
-      {
-        "description": "コンサルティング費用",
-        "quantity": 1,
-        "unit_price": "100000",
-        "tax_rate": 10
-      }
-    ]
-  }
-}
+```bash
+freee invoice post invoices -d '{
+  "company_id": 123456,
+  "billing_date": "2025-01-15",
+  "partner_id": 789,
+  "partner_title": "御中",
+  "tax_entry_method": "out",
+  "tax_fraction": "omit",
+  "withholding_tax_entry_method": "out",
+  "lines": [
+    {
+      "description": "コンサルティング費用",
+      "quantity": 1,
+      "unit_price": "100000",
+      "tax_rate": 10
+    }
+  ]
+}'
 ```
 
 ## Tips

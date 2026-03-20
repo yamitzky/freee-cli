@@ -19,80 +19,56 @@ freee会計APIを使った取引の登録・検索ガイド。
 
 ### 取引一覧を取得
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/deals",
-  "query": {
-    "limit": 10
-  }
-}
+```bash
+freee accounting get deals limit==10
 ```
 
 ### 期間で絞り込み
 
-```
-freee_api_get {
-  "service": "accounting",
-  "path": "/api/1/deals",
-  "query": {
-    "start_issue_date": "2025-01-01",
-    "end_issue_date": "2025-01-31",
-    "type": "expense"
-  }
-}
+```bash
+freee accounting get deals start_issue_date==2025-01-01 end_issue_date==2025-01-31 type==expense
 ```
 
 ### 支出を作成（未決済）
 
-```
-freee_api_post {
-  "service": "accounting",
-  "path": "/api/1/deals",
-  "body": {
-    "company_id": 123456,
-    "issue_date": "2025-01-15",
-    "type": "expense",
-    "details": [
-      {
-        "account_item_id": 101,
-        "tax_code": 1,
-        "amount": 10000,
-        "description": "消耗品購入"
-      }
-    ]
-  }
-}
+```bash
+freee accounting post deals -d '{
+  "issue_date": "2025-01-15",
+  "type": "expense",
+  "details": [
+    {
+      "account_item_id": 101,
+      "tax_code": 1,
+      "amount": 10000,
+      "description": "消耗品購入"
+    }
+  ]
+}'
 ```
 
 ### 支出を作成（決済済み）
 
-```
-freee_api_post {
-  "service": "accounting",
-  "path": "/api/1/deals",
-  "body": {
-    "company_id": 123456,
-    "issue_date": "2025-01-15",
-    "type": "expense",
-    "details": [
-      {
-        "account_item_id": 101,
-        "tax_code": 1,
-        "amount": 10000,
-        "description": "消耗品購入"
-      }
-    ],
-    "payments": [
-      {
-        "amount": 10000,
-        "from_walletable_type": "wallet",
-        "from_walletable_id": 1,
-        "date": "2025-01-15"
-      }
-    ]
-  }
-}
+```bash
+freee accounting post deals -d '{
+  "issue_date": "2025-01-15",
+  "type": "expense",
+  "details": [
+    {
+      "account_item_id": 101,
+      "tax_code": 1,
+      "amount": 10000,
+      "description": "消耗品購入"
+    }
+  ],
+  "payments": [
+    {
+      "amount": 10000,
+      "from_walletable_type": "wallet",
+      "from_walletable_id": 1,
+      "date": "2025-01-15"
+    }
+  ]
+}'
 ```
 
 ## Tips
