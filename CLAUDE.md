@@ -11,14 +11,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `bun run check` - Run Biome lint + format (recommended before PR)
 - `bun run test:run` - Run tests (vitest)
 - `bun run dev` - Start development server
-- `bun run inspector` - MCP inspector for debugging tools
 - `bun run changeset` - Create a new changeset for version bumps
 - `bun run version` - Apply changesets to update versions and CHANGELOG
 - `bun run release` - Build and publish to npm
 
 ## Architecture
 
-MCP server that exposes freee API endpoints as MCP tools:
+freee API CLI & Agent Skill:
 
 - Schema: Multiple OpenAPI schemas in `openapi/` directory
   - `accounting-api-schema.json` - 会計API (https://api.freee.co.jp)
@@ -27,43 +26,30 @@ MCP server that exposes freee API endpoints as MCP tools:
   - `pm-api-schema.json` - 工数管理API (https://api.freee.co.jp/pm)
   - `sm-api-schema.json` - 販売API (https://api.freee.co.jp/sm)
 - Schema Loader: `src/openapi/schema-loader.ts` loads and manages all API schemas
-- Tool Generation: `generateClientModeTool()` in `src/openapi/client-mode.ts` creates method-specific tools
-  - Tools: `freee_api_get`, `freee_api_post`, `freee_api_put`, `freee_api_delete`, `freee_api_patch`, `freee_api_list_paths`
-  - Automatically detects API type from path and uses correct base URL
-  - Validates paths against all OpenAPI schemas before execution
-  - Supports all 5 freee APIs seamlessly
+- CLI: `src/cli-app/` - freee CLI (Agent Skill 用、メインインターフェース)
+  - Entry: `src/cli-app/entry.ts` → `bin/freee.js`
+  - Router: `src/cli-app/router.ts` - サブコマンドルーティング
+  - Path resolver: `src/cli-app/path-resolver.ts` - ショートハンドパス解決
+  - API docs: `src/cli-app/api-docs.ts` - OpenAPI からドキュメント生成
+  - API exec: `src/cli-app/api-exec.ts` - API リクエスト実行（コンパクト出力）
+  - API list: `src/cli-app/api-list.ts` - エンドポイント一覧
 - Requests: `makeApiRequest()` in `src/api/client.ts` handles API calls with auto-auth and company_id injection
-
-### Configuration
-
-Run `freee-mcp configure` to set up configuration interactively:
-
-- Creates `~/.config/freee-mcp/config.json` with OAuth credentials and company settings
-- More secure (file permissions 0600)
 
 ### CLI Subcommands
 
-- `freee-mcp` - Start MCP server
-- `freee-mcp configure` - Interactive configuration setup
+- `freee-mcp configure` - OAuth認証と事業所の対話式セットアップ
+- `freee-mcp configure --force` - 保存済みのログイン情報をリセットして再設定
+- `freee <service> ls [filter]` - エンドポイント一覧
+- `freee <service> <path> --docs` - API ドキュメント
+- `freee <service> <path> key==val` - GET リクエスト
+- `freee <service> <path> key=val` - POST リクエスト
 
-### MCP Configuration
+### Configuration
 
-After running `freee-mcp configure`:
+`freee-mcp configure` で OAuth 認証情報と事業所の設定を行う。
+設定は `~/.config/freee-mcp/config.json` に保存される。
 
-```json
-{
-  "mcpServers": {
-    "freee": {
-      "command": "npx",
-      "args": ["freee-mcp"]
-    }
-  }
-}
-```
-
-Configuration is automatically loaded from `~/.config/freee-mcp/config.json`.
-
-Development mode: Use `"command": "bun", "args": ["run", "src/index.ts"]` with `"cwd": "/path/to/freee-mcp"`
+Development mode: `bun run src/cli-app/entry.ts` で CLI を直接実行可能。
 
 ### API Base URL の上書き（開発用）
 
