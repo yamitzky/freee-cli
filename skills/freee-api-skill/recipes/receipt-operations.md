@@ -16,33 +16,28 @@ freee会計APIとカスタムツールを使ったファイルボックスの操
 
 ## ファイルアップロード
 
-### カスタムツール freee_file_upload を使う（推奨）
+### 現在のサポート状況
 
-ローカルファイルをファイルボックスにアップロードするには、カスタムツール `freee_file_upload` を使います。
-APIの `POST /api/1/receipts` は multipart/form-data が必要なため、通常の `freee accounting post` では利用できません。
+freee-mcp CLI では、ファイルボックスへのファイルアップロード機能は未実装です。
+APIの `POST /api/1/receipts` は multipart/form-data が必要なため、CLI ツールでの対応が保留中です。
 
-```
-freee_file_upload {
-  "file_path": "/path/to/receipt.jpg",
-  "document_type": "receipt",
-  "description": "ファミリーマート レシート",
-  "receipt_metadatum_amount": 460,
-  "receipt_metadatum_issue_date": "2024-09-29",
-  "receipt_metadatum_partner_name": "ファミリーマート"
-}
-```
+### 直接 API を使用したアップロード
 
-パラメータ:
+freee API を直接呼び出してファイルをアップロードする場合は、公式の freee API ドキュメントを参照してください：
+https://developer.freee.co.jp/docs/accounting
 
-| 名前 | 必須 | 説明 |
-|------|------|------|
-| file_path | はい | アップロードするファイルのローカルパス |
-| document_type | いいえ | 書類の種類: receipt(領収書), invoice(請求書), other(その他) |
-| description | いいえ | メモ（最大255文字） |
-| receipt_metadatum_amount | いいえ | 金額 |
-| receipt_metadatum_issue_date | いいえ | 発行日 (yyyy-mm-dd) |
-| receipt_metadatum_partner_name | いいえ | 取引先名（最大255文字） |
-| qualified_invoice | いいえ | 適格請求書等: qualified, not_qualified, unselected |
+POST `/api/1/receipts` に multipart/form-data でリクエストを送信することでアップロード可能です。
+
+アップロード時に指定可能なメタデータ:
+
+| パラメータ | 説明 |
+|-----------|------|
+| document_type | 書類の種類: receipt(領収書), invoice(請求書), other(その他) |
+| description | メモ（最大255文字） |
+| receipt_metadatum_amount | 金額 |
+| receipt_metadatum_issue_date | 発行日 (yyyy-mm-dd) |
+| receipt_metadatum_partner_name | 取引先名（最大255文字） |
+| qualified_invoice | 適格請求書等: qualified, not_qualified, unselected |
 
 ## 使用例
 
