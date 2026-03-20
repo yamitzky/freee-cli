@@ -73,6 +73,7 @@ Input syntax:
 - `-d '{}'` -- full JSON body
 
 Use `--max=N` to show more items (default: 10).
+Use `--verbose` to show the actual API URL being called.
 
 ## Workflow
 

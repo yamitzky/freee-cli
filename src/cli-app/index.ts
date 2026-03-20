@@ -46,6 +46,7 @@ API:
     -d '{}'     JSON ボディを直接指定
     --json      レスポンスを生JSONで表示
     --max=N     表示件数（デフォルト: 10）
+    --verbose   リクエスト先URLとボディを表示
 
 Options:
   --version                 バージョンを表示
