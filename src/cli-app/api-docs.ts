@@ -275,10 +275,6 @@ export function generateDocs(service: ApiType, concretePath: string, method?: st
 
     sections.push(`## ${m.toUpperCase()} ${schemaPath}`);
     if (op.summary) sections.push(`${op.summary}`);
-    if (op.description) {
-      sections.push('');
-      sections.push(stripHtml(op.description));
-    }
     sections.push('');
 
     // Parameters

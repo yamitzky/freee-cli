@@ -14,11 +14,12 @@ description: >-
 The CLI is self-documenting. Always prefer running these commands over guessing
 syntax or relying on memorized knowledge:
 
-- `freee accounting ls` -- list every accounting API endpoint.
+- `freee accounting ls` -- list all accounting API endpoints.
+- `freee accounting ls deals` -- filter endpoints by keyword.
 - `freee accounting <path> --help` -- show methods and usage for an endpoint.
-- `freee accounting <path> --docs` -- print formatted API docs (params, response schema).
-- `freee accounting <path> --docs -X POST` -- print docs for a specific method.
-- `freee accounting <path> --spec` -- print raw OpenAPI fragment (JSON).
+- `freee accounting <path> --docs` -- compact API docs (params, request/response schema).
+- `freee accounting <path> --docs -X POST` -- docs for a specific method.
+- `freee accounting <path> --spec` -- raw OpenAPI fragment (JSON).
 
 ## Authentication
 
@@ -71,6 +72,10 @@ Input syntax:
 - `key:=json` -- body typed field (numbers, arrays, booleans)
 - `-d '{"json":"body"}'` -- full JSON body
 - `-X METHOD` -- override HTTP method (GET/POST/PUT/DELETE/PATCH)
+
+Token-saving flags:
+- `--max=N` -- limit array items in response (default: 10)
+- `--no-truncate` -- show full response without truncation
 
 ## Workflow
 

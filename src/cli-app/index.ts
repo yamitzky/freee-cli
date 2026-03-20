@@ -26,16 +26,18 @@ Company:
   freee company current     現在の事業所を表示
 
 API:
-  freee <service> ls                    エンドポイント一覧
+  freee <service> ls [filter]           エンドポイント一覧（filterで絞込可）
   freee <service> <path>                GET リクエスト実行
   freee <service> <path> --help         エンドポイントの詳細を表示
-  freee <service> <path> --docs         フォーマット済みドキュメントを表示
+  freee <service> <path> --docs         コンパクトなAPIドキュメントを表示
   freee <service> <path> --spec         生の OpenAPI スキーマを表示
   freee <service> <path> key==value     クエリパラメータ付き GET
   freee <service> <path> key=value      ボディパラメータ付き POST
   freee <service> <path> key:=json      JSON 値のボディパラメータ付き POST
   freee <service> <path> -X METHOD      HTTP メソッドを指定
   freee <service> <path> -d '{"json"}'  JSON ボディを直接指定
+  freee <service> <path> --max=N        配列レスポンスの表示件数（デフォルト: 10）
+  freee <service> <path> --no-truncate  レスポンスを省略しない
 
   service: accounting, hr, invoice, pm, sm
 
@@ -94,7 +96,7 @@ export async function main(argv: string[]): Promise<void> {
       await loadConfig();
       const service = parsed.group as ApiType;
       if (parsed.command === 'ls') {
-        console.log(listEndpoints(service));
+        console.log(listEndpoints(service, parsed.args[0]));
       } else if (parsed.command === 'api') {
         await handleApiCommand(service, parsed.args);
       } else {
