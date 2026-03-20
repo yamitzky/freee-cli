@@ -3,7 +3,7 @@ import path from 'node:path';
 import { stopCallbackServer } from '../auth/server.js';
 import { clearTokens } from '../auth/tokens.js';
 import { getConfigDir } from '../constants.js';
-import { collectCredentials, selectCompany, configureMcpIntegration } from './prompts.js';
+import { collectCredentials, selectCompany } from './prompts.js';
 import { performOAuth } from './oauth-flow.js';
 import { saveConfig } from './configuration.js';
 
@@ -40,7 +40,11 @@ export async function configure(options: ConfigureOptions = {}): Promise<void> {
     const oauthResult = await performOAuth();
     const { selected: selectedCompany, all: allCompanies } = await selectCompany(oauthResult.accessToken);
     await saveConfig(credentials, selectedCompany, allCompanies);
-    await configureMcpIntegration();
+    console.log('\nセットアップ完了!');
+    console.log('freee CLI を使って API を操作できます:');
+    console.log('  freee auth status     # 認証状態を確認');
+    console.log('  freee accounting ls   # エンドポイント一覧');
+    console.log('  freee --help          # ヘルプ\n');
   } catch (error) {
     if (error instanceof Error) {
       console.error(`\nError: ${error.message}`);

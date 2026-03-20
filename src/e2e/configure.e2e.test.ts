@@ -538,7 +538,7 @@ describe('E2E: Configure Command', () => {
       }));
     });
 
-    it('should display MCP configuration after save', async () => {
+    it('should display completion message after save', async () => {
       mockPromptsResponses = [
         {
           clientId: 'test-client-id',
@@ -553,7 +553,6 @@ describe('E2E: Configure Command', () => {
       const { configure } = await import('../cli');
       await configure();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('MCP設定'));
       expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('セットアップ完了'));
     });
   });
