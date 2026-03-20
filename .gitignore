@@ -140,3 +140,4 @@ out
 
 # bin build outputs (all packages)
 **/bin/cli.js
+**/bin/freee.js
