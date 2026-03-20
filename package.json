@@ -3,7 +3,8 @@
   "name": "freee-mcp",
   "version": "0.13.0",
   "bin": {
-    "freee-mcp": "./bin/cli.js"
+    "freee-mcp": "./bin/cli.js",
+    "freee": "./bin/freee.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
