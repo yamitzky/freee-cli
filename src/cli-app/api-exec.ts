@@ -96,6 +96,13 @@ export async function executeApiRequest(service: ApiType, input: ApiInput): Prom
     body = { ...body, company_id: Number(companyId) };
   }
 
+  if (input.flags.includes('--verbose')) {
+    const url = `${validation.baseUrl}${apiPath}`;
+    const qs = Object.entries(query).map(([k, v]) => `${k}=${v}`).join('&');
+    console.error(`${method} ${url}${qs ? `?${qs}` : ''}`);
+    if (body) console.error(`Body: ${JSON.stringify(body)}`);
+  }
+
   const result = await makeApiRequest(method, apiPath, query, body, validation.baseUrl);
 
   if (result === null) return '(no content)';
