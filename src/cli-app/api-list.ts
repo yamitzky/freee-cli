@@ -1,35 +1,81 @@
 import { API_CONFIGS, type ApiType } from '../openapi/schema-loader.js';
-import type { MinimalPathItem } from '../openapi/minimal-types.js';
+import type { MinimalPathItem, MinimalOperation } from '../openapi/minimal-types.js';
+
+/** Path prefixes to strip for shorthand display */
+const PATH_PREFIXES: Record<ApiType, string> = {
+  accounting: '/api/1/',
+  hr: '/api/v1/',
+  invoice: '/invoices/',
+  pm: '/projects/',
+  sm: '/businesses/',
+};
+
+function toShorthand(service: ApiType, fullPath: string): string {
+  const prefix = PATH_PREFIXES[service];
+  if (fullPath.startsWith(prefix)) {
+    return fullPath.slice(prefix.length);
+  }
+  return fullPath;
+}
+
+interface OperationInfo {
+  method: string;
+  summary: string;
+}
+
+function formatOperation(op: OperationInfo): string {
+  // Extract the key action word from summary for compact display
+  const summary = op.summary.replace(/一覧の/, '').replace(/の$/, '');
+  return `${op.method}(${summary})`;
+}
 
 export function listEndpoints(service: ApiType, filter?: string): string {
   const config = API_CONFIGS[service];
   if (!config) return `Unknown service: ${service}`;
 
-  const rows: Array<[string, string, string]> = [];
-  for (const [path, pathItem] of Object.entries(config.schema.paths)) {
+  // Group operations by path
+  const pathOps = new Map<string, OperationInfo[]>();
+
+  for (const [fullPath, pathItem] of Object.entries(config.schema.paths)) {
+    const shorthand = toShorthand(service, fullPath);
+    const ops: OperationInfo[] = [];
+
     for (const method of ['get', 'post', 'put', 'delete', 'patch'] as const) {
       const op = (pathItem as MinimalPathItem)[method];
-      if (op) rows.push([method.toUpperCase(), path, op.summary ?? '']);
+      if (op) {
+        ops.push({ method: method.toUpperCase(), summary: op.summary ?? '' });
+      }
+    }
+
+    if (ops.length > 0) {
+      pathOps.set(shorthand, ops);
     }
   }
 
-  rows.sort((a, b) => a[1].localeCompare(b[1]) || a[0].localeCompare(b[0]));
+  // Sort by path
+  const sorted = [...pathOps.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 
-  // Filter by keyword if provided (matches path or summary)
+  // Filter by keyword if provided
   const filtered = filter
-    ? rows.filter((r) => r[1].includes(filter) || r[2].includes(filter))
-    : rows;
+    ? sorted.filter(([path, ops]) =>
+        path.includes(filter) || ops.some((o) => o.summary.includes(filter)),
+      )
+    : sorted;
 
   if (filtered.length === 0) {
     return `No endpoints matching '${filter}'. Run: freee ${service} ls`;
   }
 
-  const headers: [string, string, string] = ['METHOD', 'PATH', 'SUMMARY'];
-  const widths = headers.map((h, i) =>
-    Math.max(h.length, ...filtered.map((r) => r[i].length)),
-  );
-  const formatRow = (row: [string, string, string]) =>
-    row.map((cell, i) => cell.padEnd(widths[i])).join('  ');
+  // Format output
+  const lines: string[] = [];
+  const maxPathLen = Math.max(8, ...filtered.map(([p]) => p.length));
 
-  return [formatRow(headers), ...filtered.map(formatRow)].join('\n');
+  lines.push(`${'RESOURCE'.padEnd(maxPathLen)}  OPERATIONS`);
+
+  for (const [path, ops] of filtered) {
+    const opsStr = ops.map(formatOperation).join(' | ');
+    lines.push(`${path.padEnd(maxPathLen)}  ${opsStr}`);
+  }
+
+  return lines.join('\n');
 }
