@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { API_CONFIGS, type ApiType } from '../openapi/schema-loader.js';
 import type { MinimalPathItem } from '../openapi/minimal-types.js';
+import { resolveSchemaPath } from './path-resolver.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -111,22 +112,6 @@ function loadFullSchema(service: ApiType): OpenApiSchema {
   const parsed = JSON.parse(content) as OpenApiSchema;
   _loadedFullSchemas[service] = parsed;
   return parsed;
-}
-
-// ---- Path resolution ----
-
-function resolveSchemaPath(service: ApiType, concretePath: string): string | null {
-  const config = API_CONFIGS[service];
-  const paths = config.schema.paths;
-
-  if (concretePath in paths) return concretePath;
-
-  for (const schemaPath of Object.keys(paths)) {
-    const pattern = schemaPath.replace(/\{[^}]+\}/g, '[^/]+');
-    if (new RegExp(`^${pattern}$`).test(concretePath)) return schemaPath;
-  }
-
-  return null;
 }
 
 // ---- HTML stripping ----

@@ -27,18 +27,19 @@ Company:
 
 API:
   freee <service> ls [filter]           エンドポイント一覧（filterで絞込可）
-  freee <service> <path>                GET リクエスト実行
-  freee <service> <path> --help         エンドポイントの詳細を表示
-  freee <service> <path> --docs         コンパクトなAPIドキュメントを表示
-  freee <service> <path> --spec         生の OpenAPI スキーマを表示
-  freee <service> <path> key==value     クエリパラメータ付き GET
-  freee <service> <path> key=value      ボディパラメータ付き POST
-  freee <service> <path> key:=json      JSON 値のボディパラメータ付き POST
-  freee <service> <path> -X METHOD      HTTP メソッドを指定
-  freee <service> <path> -d '{"json"}'  JSON ボディを直接指定
-  freee <service> <path> --max=N        配列レスポンスの表示件数（デフォルト: 10）
-  freee <service> <path> --no-truncate  レスポンスを省略しない
+  freee <service> <resource>            GET リクエスト（ショートハンド）
+  freee <service> <resource> --help     エンドポイントの詳細を表示
+  freee <service> <resource> --docs     コンパクトなAPIドキュメントを表示
+  freee <service> <resource> --spec     生の OpenAPI スキーマを表示
+  freee <service> <resource> key==val   クエリパラメータ付き GET
+  freee <service> <resource> key=val    ボディパラメータ付き POST
+  freee <service> <resource> key:=json  JSON 値のボディパラメータ付き POST
+  freee <service> <resource> -X METHOD  HTTP メソッドを指定
+  freee <service> <resource> -d '{}'    JSON ボディを直接指定
+  freee <service> <resource> --json     レスポンスを生JSONで表示
+  freee <service> <resource> --max=N    表示件数（デフォルト: 10）
 
+  resource: deals, approval_requests, partners, etc. (/api/1/ は省略可)
   service: accounting, hr, invoice, pm, sm
 
 Options:

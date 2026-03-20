@@ -14,12 +14,14 @@ description: >-
 The CLI is self-documenting. Always prefer running these commands over guessing
 syntax or relying on memorized knowledge:
 
-- `freee accounting ls` -- list all accounting API endpoints.
+- `freee accounting ls` -- list all endpoints.
 - `freee accounting ls deals` -- filter endpoints by keyword.
-- `freee accounting <path> --help` -- show methods and usage for an endpoint.
-- `freee accounting <path> --docs` -- compact API docs (params, request/response schema).
-- `freee accounting <path> --docs -X POST` -- docs for a specific method.
-- `freee accounting <path> --spec` -- raw OpenAPI fragment (JSON).
+- `freee accounting deals --help` -- show methods for an endpoint.
+- `freee accounting deals --docs` -- compact API docs (params, response schema).
+- `freee accounting deals --docs -X POST` -- docs for a specific method.
+- `freee accounting deals --spec` -- raw OpenAPI fragment (JSON).
+
+Paths: use shorthand (`deals`, `approval_requests/123`) or full path (`/api/1/deals`).
 
 ## Authentication
 
@@ -50,32 +52,31 @@ company_id は API リクエストに自動注入されます。明示的に指�
 ## API Calls
 
 ```bash
-# GET with query params
-freee accounting /api/1/deals type==income limit==10
+# GET (shorthand - /api/1/ is auto-prepended)
+freee accounting deals type==income limit==10
 
-# POST with inline body fields
-freee accounting /api/1/deals type=expense issue_date=2025-01-15 details[0][tax_code]:=1 details[0][account_item_id]:=101 details[0][amount]:=5000
+# POST with inline body
+freee accounting deals type=expense issue_date=2025-01-15 details[0][tax_code]:=1 details[0][amount]:=5000
 
 # POST with JSON body
-freee accounting /api/1/deals -d '{"type":"income","issue_date":"2025-01-15","details":[{"tax_code":1,"account_item_id":101,"amount":10000}]}'
+freee accounting deals -d '{"type":"income","issue_date":"2025-01-15","details":[{"tax_code":1,"amount":10000}]}'
 
-# PUT (explicit method)
-freee accounting /api/1/deals/123 -X PUT -d '{"type":"expense","details":[...]}'
-
-# DELETE
-freee accounting /api/1/deals/123 -X DELETE
+# PUT / DELETE
+freee accounting deals/123 -X PUT -d '{"type":"expense"}'
+freee accounting deals/123 -X DELETE
 ```
 
 Input syntax:
 - `key==value` -- query parameter
 - `key=value` -- body string field
 - `key:=json` -- body typed field (numbers, arrays, booleans)
-- `-d '{"json":"body"}'` -- full JSON body
-- `-X METHOD` -- override HTTP method (GET/POST/PUT/DELETE/PATCH)
+- `-d '{}'` -- full JSON body
+- `-X METHOD` -- override HTTP method
 
-Token-saving flags:
-- `--max=N` -- limit array items in response (default: 10)
-- `--no-truncate` -- show full response without truncation
+Output control:
+- Default: compact table (top-level fields, 10 items max)
+- `--json` -- full JSON response
+- `--max=N` -- change item limit
 
 ## Workflow
 

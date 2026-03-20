@@ -18,10 +18,11 @@ export function parseCommand(argv: string[]): ParsedCommand {
       return { group, command: 'ls', args: [] };
     }
     const [first, ...remaining] = rest;
-    if (first.startsWith('/')) {
-      return { group, command: 'api', args: [first, ...remaining] };
+    if (first === 'ls') {
+      return { group, command: 'ls', args: remaining };
     }
-    return { group, command: first, args: remaining };
+    // Both full paths (/api/1/deals) and shorthands (deals, deals/123) → api command
+    return { group, command: 'api', args: [first, ...remaining] };
   }
 
   // Other groups: auth, company, help, etc.
