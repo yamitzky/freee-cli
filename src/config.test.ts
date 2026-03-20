@@ -77,12 +77,6 @@ describe('config', () => {
     expect(config.oauth.scope).toBe('read write');
   });
 
-  it('should have correct server configuration', async () => {
-    const config = await loadConfig();
-    expect(config.server.name).toBe('freee');
-    expect(config.server.version).toMatch(/^\d+\.\d+\.\d+/);
-  });
-
   it('should have correct auth timeout', async () => {
     const config = await loadConfig();
     expect(config.auth.timeoutMs).toBe(AUTH_TIMEOUT_MS);

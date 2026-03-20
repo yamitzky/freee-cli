@@ -1,9 +1,5 @@
-import { createRequire } from 'node:module';
 import { loadFullConfig } from './config/companies.js';
 import { DEFAULT_CALLBACK_PORT, AUTH_TIMEOUT_MS, FREEE_API_URL } from './constants.js';
-
-const require = createRequire(import.meta.url);
-const { version: packageVersion } = require('../package.json') as { version: string };
 
 /**
  * Validate and parse a callback port value.
@@ -40,11 +36,6 @@ interface Config {
     authorizationEndpoint: string;
     tokenEndpoint: string;
     scope: string;
-  };
-  server: {
-    name: string;
-    version: string;
-    instructions: string;
   };
   auth: {
     timeoutMs: number;
@@ -134,11 +125,6 @@ export async function loadConfig(): Promise<Config> {
       authorizationEndpoint: 'https://accounts.secure.freee.co.jp/public_api/authorize',
       tokenEndpoint: 'https://accounts.secure.freee.co.jp/public_api/token',
       scope: 'read write',
-    },
-    server: {
-      name: 'freee',
-      version: packageVersion,
-      instructions: 'freee APIと連携するCLI & Agent Skill。会計・人事労務・請求書・工数管理・販売APIをサポート。詳細ガイドはfreee-api-skill skillを参照。skillが未インストールの場合は npx skills add freee/freee-mcp で追加。',
     },
     auth: {
       timeoutMs: AUTH_TIMEOUT_MS,
