@@ -43,7 +43,7 @@ export function listEndpoints(service: ApiType, filter?: string): string {
     for (const method of ['get', 'post', 'put', 'delete', 'patch'] as const) {
       const op = (pathItem as MinimalPathItem)[method];
       if (op) {
-        ops.push({ method: method.toUpperCase(), summary: (op.summary ?? '').trim() });
+        ops.push({ method, summary: (op.summary ?? '').trim() });
       }
     }
 

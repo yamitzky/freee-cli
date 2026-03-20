@@ -22,8 +22,8 @@ describe('listEndpoints', () => {
     const output = listEndpoints('accounting');
     // deals path should show GET and POST on one line
     const dealsLine = output.split('\n').find((l) => /^deals\s/.test(l));
-    expect(dealsLine).toContain('GET');
-    expect(dealsLine).toContain('POST');
+    expect(dealsLine).toContain('get(');
+    expect(dealsLine).toContain('post(');
   });
 
   it('filters by keyword', () => {
