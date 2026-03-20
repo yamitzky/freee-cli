@@ -73,11 +73,7 @@ Input syntax:
 - `-d '{}'` -- full JSON body
 - `-X METHOD` -- override HTTP method
 
-Output: default is compact table (10 items, top-level fields only).
-Do NOT use `--json` unless you need to pipe to jq or parse structured data.
-The compact output is designed to minimize token usage.
-- `--max=N` -- show more/fewer items
-- `--json` -- raw JSON (token-heavy, avoid unless needed)
+Use `--max=N` to show more items (default: 10).
 
 ## Workflow
 
