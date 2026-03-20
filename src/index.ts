@@ -1,31 +1,23 @@
-import { createAndStartServer } from './mcp/handlers.js';
 import { configure } from './cli.js';
 
 const main = async (): Promise<void> => {
-  // Parse command line arguments
   const args = process.argv.slice(2);
-  const remote = args.includes('--remote');
   const subcommand = args.find((arg) => !arg.startsWith('--'));
 
-  // Handle configure subcommand
   if (subcommand === 'configure') {
     const force = args.includes('--force');
     await configure({ force });
     return;
   }
 
-  // Handle unknown subcommands
-  if (subcommand && subcommand !== 'client') {
-    console.error(`Unknown subcommand: ${subcommand}`);
-    console.error('Usage: freee-mcp [configure] [--force] [--remote]');
-    console.error('  configure  - Interactive configuration setup');
-    console.error('  --force    - 保存済みのログイン情報をリセットして再設定');
-    console.error('  --remote   - remote MCP サーバーとして動作（ファイルアップロード機能を無効化）');
-    process.exit(1);
-  }
-
-  console.error('Starting freee MCP server');
-  await createAndStartServer({ remote });
+  console.error('Usage: freee-mcp configure [--force]');
+  console.error('');
+  console.error('  configure  - OAuth認証と事業所の設定を対話式で行います');
+  console.error('  --force    - 保存済みのログイン情報をリセットして再設定');
+  console.error('');
+  console.error('API操作には freee CLI を使ってください:');
+  console.error('  freee --help');
+  process.exit(1);
 };
 
 main().catch((error) => {
