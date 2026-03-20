@@ -40,9 +40,12 @@ freee API CLI & Agent Skill:
 - `freee-mcp configure` - OAuth認証と事業所の対話式セットアップ
 - `freee-mcp configure --force` - 保存済みのログイン情報をリセットして再設定
 - `freee <service> ls [filter]` - エンドポイント一覧
-- `freee <service> <path> --docs` - API ドキュメント
-- `freee <service> <path> key==val` - GET リクエスト
-- `freee <service> <path> key=val` - POST リクエスト
+- `freee <service> docs <path>` - API ドキュメント
+- `freee <service> help <path>` - メソッド一覧
+- `freee <service> get <path> key==val` - GET リクエスト
+- `freee <service> post <path> key=val` - POST リクエスト
+- `freee <service> put <path> -d '{}'` - PUT リクエスト
+- `freee <service> delete <path>` - DELETE リクエスト
 
 ### Configuration
 
