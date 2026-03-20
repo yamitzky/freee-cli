@@ -1,4 +1,4 @@
-export type ParsedCommand = {
+type ParsedCommand = {
   group: string;
   command: string;
   args: string[];

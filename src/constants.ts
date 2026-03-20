@@ -51,7 +51,7 @@ export const FREEE_API_URL = 'https://api.freee.co.jp';
  * Falls back to 'dev' for development/test environments
  */
 declare const __PACKAGE_VERSION__: string | undefined;
-export const PACKAGE_VERSION = typeof __PACKAGE_VERSION__ !== 'undefined' ? __PACKAGE_VERSION__ : 'dev';
+const PACKAGE_VERSION = typeof __PACKAGE_VERSION__ !== 'undefined' ? __PACKAGE_VERSION__ : 'dev';
 
 /**
  * User-Agent header value for API requests

@@ -27,7 +27,7 @@ export function parseCallbackPort(value: string | number | undefined): number {
   return port;
 }
 
-export interface Config {
+interface Config {
   freee: {
     clientId: string;
     clientSecret: string;

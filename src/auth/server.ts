@@ -22,7 +22,7 @@ interface CliAuthHandler {
  * AuthenticationManager - manages pending authentication requests
  * Encapsulates authentication state that was previously global
  */
-export class AuthenticationManager {
+class AuthenticationManager {
   private pendingAuthentications = new Map<string, PendingAuthentication>();
   private cliAuthHandlers = new Map<string, CliAuthHandler>();
 
@@ -318,15 +318,6 @@ export function getActualRedirectUri(): string {
 
 export async function startCallbackServer(): Promise<void> {
   return defaultCallbackServer.start();
-}
-
-export async function startCallbackServerWithAutoStop(timeoutMs: number): Promise<void> {
-  await defaultCallbackServer.start();
-  defaultCallbackServer.scheduleAutoStop(timeoutMs);
-}
-
-export function registerAuthenticationRequest(state: string, codeVerifier: string): void {
-  defaultAuthManager.registerAuthentication(state, codeVerifier);
 }
 
 export function stopCallbackServer(): void {

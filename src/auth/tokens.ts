@@ -24,7 +24,6 @@ export const OAuthTokenResponseSchema = z.object({
   scope: z.string().optional(),
 });
 
-export type OAuthTokenResponse = z.infer<typeof OAuthTokenResponseSchema>;
 
 export interface TokenData {
   access_token: string;

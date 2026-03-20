@@ -5,7 +5,7 @@ import os from 'node:os';
 /**
  * テスト用の一時ディレクトリを作成・管理するユーティリティ
  */
-export class TestTempDir {
+class TestTempDir {
   private tempDir: string;
   private created = false;
 

@@ -7,7 +7,7 @@ import { collectCredentials, selectCompany } from './prompts.js';
 import { performOAuth } from './oauth-flow.js';
 import { saveConfig } from './configuration.js';
 
-export interface ConfigureOptions {
+interface ConfigureOptions {
   force?: boolean;
 }
 
