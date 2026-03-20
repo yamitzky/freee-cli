@@ -23,33 +23,6 @@ export async function parseJsonResponse(response: Response): Promise<JsonParseRe
 }
 
 /**
- * MCP text response type
- */
-export interface TextResponse {
-  content: {
-    type: 'text';
-    text: string;
-  }[];
-}
-
-/**
- * Creates a standardized MCP text response.
- *
- * @param text - The text content for the response
- * @returns MCP-formatted text response object
- */
-export function createTextResponse(text: string): TextResponse {
-  return {
-    content: [
-      {
-        type: 'text',
-        text,
-      },
-    ],
-  };
-}
-
-/**
  * Formats an error into a string message.
  * Handles both Error instances and other thrown values.
  *

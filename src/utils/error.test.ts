@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   parseJsonResponse,
-  createTextResponse,
   formatErrorMessage,
 } from './error.js';
 
@@ -42,34 +41,6 @@ describe('parseJsonResponse', () => {
     expect(result).toEqual({
       success: false,
       error: 'String error',
-    });
-  });
-});
-
-describe('createTextResponse', () => {
-  it('should create MCP text response with given text', () => {
-    const result = createTextResponse('Hello, world!');
-
-    expect(result).toEqual({
-      content: [
-        {
-          type: 'text',
-          text: 'Hello, world!',
-        },
-      ],
-    });
-  });
-
-  it('should handle empty string', () => {
-    const result = createTextResponse('');
-
-    expect(result).toEqual({
-      content: [
-        {
-          type: 'text',
-          text: '',
-        },
-      ],
     });
   });
 });
