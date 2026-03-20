@@ -77,11 +77,27 @@ interface OpenAPIPathItem {
 
 interface OpenAPISchema {
   paths: Record<string, OpenAPIPathItem>;
+  components?: {
+    parameters?: Record<string, OpenAPIParameter>;
+    [key: string]: unknown;
+  };
 }
 
 /**
  * Minimize an OpenAPI schema to only include fields that are actually used
  */
+function resolveParamRef(
+  ref: string,
+  schema: OpenAPISchema
+): OpenAPIParameter | null {
+  // Resolve $ref like "#/components/parameters/company_id"
+  const match = ref.match(/^#\/components\/parameters\/(.+)$/);
+  if (match && schema.components?.parameters) {
+    return schema.components.parameters[match[1]] ?? null;
+  }
+  return null;
+}
+
 function minimizeSchema(schema: OpenAPISchema): MinimalSchema {
   const minimalPaths: Record<string, MinimalPathItem> = {};
   const methods = ["get", "post", "put", "delete", "patch"] as const;
@@ -103,7 +119,17 @@ function minimizeSchema(schema: OpenAPISchema): MinimalSchema {
       }
 
       if (operation.parameters && operation.parameters.length > 0) {
-        minimalOperation.parameters = operation.parameters
+        // Resolve $ref parameters first
+        const resolvedParams = operation.parameters
+          .map((p) => {
+            if ("$ref" in p && typeof (p as { $ref: string }).$ref === "string") {
+              return resolveParamRef((p as { $ref: string }).$ref, schema);
+            }
+            return p;
+          })
+          .filter((p): p is OpenAPIParameter => p !== null);
+
+        minimalOperation.parameters = resolvedParams
           .filter((p) => p.in === "path" || p.in === "query")
           .map((p) => {
             const param: MinimalParameter = {

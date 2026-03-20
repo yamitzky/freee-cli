@@ -63,6 +63,7 @@ interface OpenApiSchema {
   paths: Record<string, FullPathItem>;
   components?: {
     schemas?: Record<string, SchemaObject>;
+    parameters?: Record<string, ParameterObject>;
   };
 }
 
@@ -129,10 +130,26 @@ function stripHtml(text: string): string {
 
 // ---- $ref resolution ----
 
+function resolveParamRef(param: ParameterObject, root: OpenApiSchema): ParameterObject {
+  if ('$ref' in param && typeof (param as { $ref: string }).$ref === 'string') {
+    const ref = (param as { $ref: string }).$ref;
+    const match = ref.match(/^#\/components\/parameters\/(.+)$/);
+    if (match && root.components?.parameters) {
+      return root.components.parameters[match[1]] ?? param;
+    }
+  }
+  return param;
+}
+
 function resolveRef(schema: SchemaObject, root: OpenApiSchema): SchemaObject {
   if (schema.$ref) {
+    if (!schema.$ref.startsWith('#/components/schemas/')) {
+      // Unsupported $ref format (e.g., #/paths/...) - return as-is
+      return { type: 'object' };
+    }
     const refPath = schema.$ref.replace('#/components/schemas/', '');
-    const resolved = root.components?.schemas?.[refPath] ?? schema;
+    const resolved = root.components?.schemas?.[refPath];
+    if (!resolved) return { type: 'object' };
     return resolveRef(resolved, root);
   }
   if (schema.allOf) {
@@ -268,7 +285,8 @@ export function generateDocs(service: ApiType, concretePath: string, method?: st
       sections.push('');
       sections.push('| 名前 | 位置 | 必須 | 型 | 説明 |');
       sections.push('| --- | --- | --- | --- | --- |');
-      for (const param of op.parameters) {
+      for (const rawParam of op.parameters) {
+        const param = resolveParamRef(rawParam, fullSchema);
         const paramType = param.schema?.type ?? param.type ?? 'string';
         const required = param.required ? 'Yes' : '';
         const desc = param.description ? stripHtml(param.description) : '';

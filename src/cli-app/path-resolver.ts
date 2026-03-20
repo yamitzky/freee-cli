@@ -7,9 +7,9 @@ import { API_CONFIGS, type ApiType } from '../openapi/schema-loader.js';
 const PATH_PREFIXES: Record<ApiType, string> = {
   accounting: '/api/1/',
   hr: '/api/v1/',
-  invoice: '/invoices/',
-  pm: '/projects/',
-  sm: '/businesses/',
+  invoice: '/',
+  pm: '/',
+  sm: '/',
 };
 
 /**

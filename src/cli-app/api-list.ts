@@ -1,13 +1,13 @@
 import { API_CONFIGS, type ApiType } from '../openapi/schema-loader.js';
-import type { MinimalPathItem, MinimalOperation } from '../openapi/minimal-types.js';
+import type { MinimalPathItem } from '../openapi/minimal-types.js';
 
 /** Path prefixes to strip for shorthand display */
 const PATH_PREFIXES: Record<ApiType, string> = {
   accounting: '/api/1/',
   hr: '/api/v1/',
-  invoice: '/invoices/',
-  pm: '/projects/',
-  sm: '/businesses/',
+  invoice: '/',
+  pm: '/',
+  sm: '/',
 };
 
 function toShorthand(service: ApiType, fullPath: string): string {
@@ -43,7 +43,7 @@ export function listEndpoints(service: ApiType, filter?: string): string {
     for (const method of ['get', 'post', 'put', 'delete', 'patch'] as const) {
       const op = (pathItem as MinimalPathItem)[method];
       if (op) {
-        ops.push({ method: method.toUpperCase(), summary: op.summary ?? '' });
+        ops.push({ method: method.toUpperCase(), summary: (op.summary ?? '').trim() });
       }
     }
 
