@@ -109,6 +109,17 @@ Use `--max=N` to show more items (default: 10).
 
 freee API 自体の機能制限に起因する問題は CLI では解決できません。詳細は `recipes/troubleshooting.md` を参照。
 
+## References
+
+`references/` ディレクトリに各 API のリファレンスドキュメントがある。
+`--docs` と同等の内容だが、リソースごとにファイルが分かれている。
+
+ファイル命名規則: `{service}-{resource}.md`（例: `accounting-deals.md`, `hr-employees.md`）
+
+CLI と references の使い分け:
+- `freee <service> <path> --docs` — 特定エンドポイントのドキュメントを即座に確認
+- `references/` — リソース全体の概要を把握したいとき
+
 ## 関連リンク
 
 - [freee API ドキュメント](https://developer.freee.co.jp/docs)
