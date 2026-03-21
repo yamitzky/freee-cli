@@ -1,5 +1,11 @@
 # freee-mcp
 
+## 0.1.1
+
+### Patch Changes
+
+- 87d265e: CLI + Agent Skill アーキテクチャへの移行、リリース設定の修正、設定ディレクトリのフォーク元との共用化
+
 ## 0.13.0
 
 ### Minor Changes
