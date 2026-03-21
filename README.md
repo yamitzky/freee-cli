@@ -6,7 +6,7 @@ freee API を AI エージェントから操作するための CLI & Agent Skill
 
 [![npm version](https://badge.fury.io/js/%40yamitzky%2Ffreee.svg)](https://www.npmjs.com/package/@yamitzky/freee)
 
-> Note: このプロジェクトは開発中であり、予期せぬ不具合が発生する可能性があります。問題を発見された場合は [Issue](https://github.com/yamitzky/freee-cli/issues) として報告していただけると幸いです。
+> Note: このプロジェクトは非公式フォークです。また、CLIの作者は会計APIしか使っておらず、十分なテストを行っていません。
 
 ## 特徴
 
@@ -31,7 +31,7 @@ sequenceDiagram
     User->>Claude: リクエスト<br/>「取引一覧を取得して」
 
     Note over Claude,Skill: 1. SKILL からリファレンスを取得
-    Claude->>Skill: freee-api-skill 呼び出し
+    Claude->>Skill: freee-cli-skill 呼び出し
     Skill-->>Claude: API リファレンス注入<br/>(エンドポイント、パラメータ仕様)
 
     Note over Claude,CLI: 2. CLI で API を実行

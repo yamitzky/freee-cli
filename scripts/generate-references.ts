@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 const SCRIPT_DIR = __dirname;
 const PROJECT_ROOT = join(SCRIPT_DIR, "..");
 const OPENAPI_DIR = join(PROJECT_ROOT, "openapi");
-const OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-api-skill", "references");
+const OUTPUT_DIR = join(PROJECT_ROOT, "skills", "freee-cli-skill", "references");
 const MAPPINGS_FILE = join(OPENAPI_DIR, "tag-mappings.json");
 
 // Type definitions

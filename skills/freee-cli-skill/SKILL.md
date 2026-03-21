@@ -1,5 +1,5 @@
 ---
-name: freee-api-skill
+name: freee-cli-skill
 description: >-
   freee CLI (`freee`) を使って freee API を操作する。
   会計・人事労務・請求書・工数管理・販売の API リファレンスと使い方ガイドを提供。
