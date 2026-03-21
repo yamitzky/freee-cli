@@ -9,6 +9,7 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
+    environment: npm-publish
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
