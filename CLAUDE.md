@@ -50,7 +50,7 @@ freee API CLI & Agent Skill:
 ### Configuration
 
 `freee configure` で OAuth 認証情報と事業所の設定を行う。
-設定は `~/.config/freee-cli/config.json` に保存される。
+設定は `~/.config/freee-mcp/config.json` に保存される。
 
 Development mode: `bun run src/cli-app/entry.ts` で CLI を直接実行可能。
 

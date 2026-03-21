@@ -75,71 +75,9 @@ jobs:
       - name: Package skill for release
         if: steps.check-release.outputs.skip != 'true'
         run: |
-          cd skills/freee-api-skill
-          zip -r ../../freee-api-skill.zip .
+          cd skills/freee-cli-skill
+          zip -r ../../freee-cli-skill.zip .
           echo "✅ Packaged skill"
-
-      - name: Collect contributors from community PRs
-        if: steps.check-release.outputs.skip != 'true'
-        id: contributors
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # 前回のリリースタグを取得（現在のタグを除く）
-          PREV_TAG=$(git tag --sort=-v:refname | grep '^v' | sed -n '2p')
-
-          CONTRIBUTORS=""
-          if [ -n "$PREV_TAG" ]; then
-            PREV_DATE=$(git log -1 --format=%aI "$PREV_TAG")
-            echo "Previous tag: $PREV_TAG ($PREV_DATE)"
-
-            # 前回リリース以降に close された from-pr issue を検索
-            USERS=$(gh issue list \
-              --label "from-pr" \
-              --state closed \
-              --search "closed:>=$PREV_DATE" \
-              --json body \
-              --jq '.[].body' \
-            | { grep -oP 'by @\K[^\s)+]+' || true; } \
-            | sort -u)
-
-            if [ -n "$USERS" ]; then
-              CONTRIBUTORS=$(echo "$USERS" | while read -r user; do
-                echo "- @${user}"
-              done)
-              echo "Found contributors: $USERS"
-            fi
-          else
-            echo "No previous tag found, skipping contributor collection"
-          fi
-
-          {
-            echo "list<<EOF"
-            echo "$CONTRIBUTORS"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-          # README の Contributors セクションに新しいユーザーを追加
-          if [ -n "$USERS" ]; then
-            while read -r user; do
-              if ! grep -q "github.com/${user}" README.md; then
-                sed -i "s|<!-- CONTRIBUTORS-END -->|<a href=\"https://github.com/${user}\"><img src=\"https://github.com/${user}.png\" width=\"40\" height=\"40\" alt=\"@${user}\"></a>\n<!-- CONTRIBUTORS-END -->|" README.md
-                echo "Added $user to README contributors"
-              fi
-            done <<< "$USERS"
-
-            if git diff --quiet README.md; then
-              echo "No new contributors to add to README"
-            else
-              git config user.name "github-actions[bot]"
-              git config user.email "github-actions[bot]@users.noreply.github.com"
-              git add README.md
-              git commit -m "docs: add new contributors to README"
-              git push
-              echo "Pushed README contributor updates"
-            fi
-          fi
 
       - name: Create GitHub Release
         if: steps.check-release.outputs.skip != 'true'
@@ -151,17 +89,17 @@ jobs:
             ## What's Changed
 
             See [CHANGELOG.md](./CHANGELOG.md) for details.
-            ${{ steps.contributors.outputs.list != '' && format('\n## Contributors\n\nThank you to the following contributors for their suggestions!\n\n{0}\n', steps.contributors.outputs.list) || '' }}
+
             ## Package
-            - npm: https://www.npmjs.com/package/freee-mcp/v/${{ steps.version.outputs.version }}
-            - Install: `npm install freee-mcp@${{ steps.version.outputs.version }}`
+            - npm: https://www.npmjs.com/package/@yamitzky/freee/v/${{ steps.version.outputs.version }}
+            - Install: `npm install @yamitzky/freee@${{ steps.version.outputs.version }}`
 
             ## Claude Plugin
             This repository can also be used as a Claude Code plugin:
             ```bash
-            claude plugin install freee/freee-mcp
+            claude plugin install yamitzky/freee-cli
             ```
-          files: freee-api-skill.zip
+          files: freee-cli-skill.zip
           draft: false
           prerelease: false
         env:
@@ -172,11 +110,11 @@ jobs:
         id: check-npm
         run: |
           VERSION=${{ steps.version.outputs.version }}
-          if npm view freee-mcp@$VERSION version 2>/dev/null; then
-            echo "ℹ️  npm package freee-mcp@$VERSION already exists - skipping"
+          if npm view @yamitzky/freee@$VERSION version 2>/dev/null; then
+            echo "ℹ️  npm package @yamitzky/freee@$VERSION already exists - skipping"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "✅ npm package freee-mcp@$VERSION does not exist - will publish"
+            echo "✅ npm package @yamitzky/freee@$VERSION does not exist - will publish"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
