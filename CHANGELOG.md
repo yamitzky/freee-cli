@@ -1,5 +1,20 @@
 # freee-mcp
 
+## 1.0.0
+
+### Major Changes
+
+- ac8f3e9: パッケージ名を `freee-mcp` から `@yamitzky/freee` に変更。設定ディレクトリを `~/.config/freee-cli/` に変更。`freee-mcp` コマンドを廃止し、`freee configure` に統合。
+
+### Minor Changes
+
+- 5301199: freee CLI (`freee` コマンド) を追加。ntn スタイルのシェルコマンドで freee 会計 API を操作可能に。
+  auth/company/accounting サブコマンド、--help/--docs/--spec によるセルフドキュメント機能を搭載。
+
+### Patch Changes
+
+- 2961211: publish.yml のパッケージ名・スキル名を修正、publishConfig 追加、設定ディレクトリをフォーク元と共用（freee-mcp）に変更
+
 ## 0.13.0
 
 ### Minor Changes
