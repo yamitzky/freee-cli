@@ -79,11 +79,6 @@ Changeset requirement (必須):
 - フォーマット: frontmatter に `"@yamitzky/freee": patch|minor|major`、本文に変更内容の説明（日本語）
 - bump type: `patch`（バグ修正）、`minor`（新機能）、`major`（破壊的変更）
 
-Contributor の追加:
-
-- Issue を起票してくれた人を README.md の Contributors セクション（`<!-- CONTRIBUTORS-START -->` ～ `<!-- CONTRIBUTORS-END -->` の間）に追加する
-- 既存のフォーマットに合わせて `<a href="https://github.com/{username}"><img src="https://github.com/{username}.png" width="40" height="40" alt="@{username}"></a>` を末尾に追記する
-
 Common issues:
 
 - Mock function return types (ensure `id` fields are strings)

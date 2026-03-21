@@ -2,9 +2,7 @@
 
 freee API を AI エージェントから操作するための CLI & Agent Skill です。
 
-CLI と skill（API リファレンス）を組み合わせて利用することを想定しています。
-
-> Note: このパッケージは [freee/freee-mcp](https://github.com/freee/freee-mcp) の非公式フォークです。
+[freee/freee-mcp](https://github.com/freee/freee-mcp) を元に、MCP サーバーを廃止して CLI + Agent Skill アーキテクチャに再構築した非公式フォークです。
 
 [![npm version](https://badge.fury.io/js/%40yamitzky%2Ffreee.svg)](https://www.npmjs.com/package/@yamitzky/freee)
 
@@ -155,32 +153,6 @@ service: accounting, hr, invoice, pm, sm
 - 事業所の切り替え: `freee company set <id>`
 - company_id を含まない API（例: `/api/1/companies`）はそのまま実行可能
 
-## コントリビューション
-
-詳しくは [CONTRIBUTING.md](./CONTRIBUTING.md) をご覧ください。
-
-### Contributors
-
-<!-- CONTRIBUTORS-START -->
-<a href="https://github.com/him0"><img src="https://github.com/him0.png" width="40" height="40" alt="@him0"></a>
-<a href="https://github.com/dais0n"><img src="https://github.com/dais0n.png" width="40" height="40" alt="@dais0n"></a>
-<a href="https://github.com/HikaruEgashira"><img src="https://github.com/HikaruEgashira.png" width="40" height="40" alt="@HikaruEgashira"></a>
-<a href="https://github.com/nakanoasaservice"><img src="https://github.com/nakanoasaservice.png" width="40" height="40" alt="@nakanoasaservice"></a>
-<a href="https://github.com/tackeyy"><img src="https://github.com/tackeyy.png" width="40" height="40" alt="@tackeyy"></a>
-<a href="https://github.com/worldscandy"><img src="https://github.com/worldscandy.png" width="40" height="40" alt="@worldscandy"></a>
-<a href="https://github.com/akhr77"><img src="https://github.com/akhr77.png" width="40" height="40" alt="@akhr77"></a>
-<a href="https://github.com/trpfrog"><img src="https://github.com/trpfrog.png" width="40" height="40" alt="@trpfrog"></a>
-<a href="https://github.com/hoshinotsuyoshi"><img src="https://github.com/hoshinotsuyoshi.png" width="40" height="40" alt="@hoshinotsuyoshi"></a>
-<a href="https://github.com/JeongJaeSoon"><img src="https://github.com/JeongJaeSoon.png" width="40" height="40" alt="@JeongJaeSoon"></a>
-<a href="https://github.com/norimura114"><img src="https://github.com/norimura114.png" width="40" height="40" alt="@norimura114"></a>
-<a href="https://github.com/akiras-ssrd"><img src="https://github.com/akiras-ssrd.png" width="40" height="40" alt="@akiras-ssrd"></a>
-<a href="https://github.com/inoue2002"><img src="https://github.com/inoue2002.png" width="40" height="40" alt="@inoue2002"></a>
-<a href="https://github.com/jacknocode"><img src="https://github.com/jacknocode.png" width="40" height="40" alt="@jacknocode"></a>
-<a href="https://github.com/tnj"><img src="https://github.com/tnj.png" width="40" height="40" alt="@tnj"></a>
-<a href="https://github.com/jaxx2104"><img src="https://github.com/jaxx2104.png" width="40" height="40" alt="@jaxx2104"></a>
-<a href="https://github.com/kbyk004"><img src="https://github.com/kbyk004.png" width="40" height="40" alt="@kbyk004"></a>
-<!-- CONTRIBUTORS-END -->
-
 ## 開発者向け
 
 ```bash
@@ -210,14 +182,10 @@ TypeScript / OAuth 2.0 + PKCE / Zod / Bun
 
 [Apache-2.0](./LICENSE)
 
-## コミュニティ
-
-質問や情報交換は Discord サーバーで行っています。お気軽にご参加ください。
-
-- [Discord サーバー](https://discord.gg/9ddTPGyxPw)
+フォーク元: [freee/freee-mcp](https://github.com/freee/freee-mcp) (Apache-2.0)
 
 ## 関連リンク
 
-- [紹介記事: Public API を MCP化するとき Agent Skill 併用が良さそう with freee-mcp](https://zenn.dev/him0/articles/766798ca1315e0)
+- [フォーク元: freee/freee-mcp](https://github.com/freee/freee-mcp) -- オリジナルの MCP サーバー実装
 - [freee API ドキュメント](https://developer.freee.co.jp/docs)
-- [Model Context Protocol](https://modelcontextprotocol.io)
+- [紹介記事: Public API を MCP化するとき Agent Skill 併用が良さそう](https://zenn.dev/him0/articles/766798ca1315e0) -- フォーク元の設計思想
