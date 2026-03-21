@@ -70,6 +70,10 @@ npx @yamitzky/freee configure
 ### 3. CLI を使う
 
 ```bash
+npm install -g @yamitzky/freee
+# または
+bun install -g @yamitzky/freee
+
 freee auth status              # 認証状態を確認
 freee accounting ls            # エンドポイント一覧
 freee accounting get deals     # 取引一覧を取得
@@ -180,9 +184,9 @@ TypeScript / OAuth 2.0 + PKCE / Zod / Bun
 
 ## License / ライセンス
 
-[Apache-2.0](./LICENSE)
+このフォークには、freee K.K. による [freee/freee-mcp](https://github.com/freee/freee-mcp) のコードが含まれており、当該コードは Apache License 2.0 に基づいて提供されています。法令上許容される限りにおいて、私がこのフォークに加えた独自の変更および追加部分については、著作権が発生するとは考えておらず、CC0 1.0 に基づき、著作権その他の関連する権利を放棄します。
 
-フォーク元: [freee/freee-mcp](https://github.com/freee/freee-mcp) (Apache-2.0)
+また、APIの利用については[freee API 利用規約](https://app.secure.freee.co.jp/terms-freee-api.html) に準拠します。
 
 ## 関連リンク
 
