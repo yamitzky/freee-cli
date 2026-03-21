@@ -89,7 +89,7 @@ jobs:
 
       - name: Check build artifacts
         run: |
-          test -f bin/cli.js
+          test -f bin/freee.js
 
       - name: Verify Node.js compatibility
-        run: node bin/cli.js --help || true
+        run: node bin/freee.js --help || true

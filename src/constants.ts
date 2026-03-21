@@ -11,13 +11,13 @@ import os from 'node:os';
 /**
  * Application name used for configuration directory
  */
-export const APP_NAME = 'freee-cli';
+export const APP_NAME = 'freee-mcp';
 
 /**
  * Get the configuration directory path.
  * Respects XDG Base Directory specification:
  * - Uses XDG_CONFIG_HOME if set
- * - Falls back to ~/.config/freee-cli
+ * - Falls back to ~/.config/freee-mcp
  */
 export function getConfigDir(): string {
   return process.env.XDG_CONFIG_HOME
