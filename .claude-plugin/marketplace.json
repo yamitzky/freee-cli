@@ -7,7 +7,7 @@
     {
       "name": "freee-cli",
       "source": "./",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "freee API を CLI & Agent Skill で操作するためのスキル。詳細な API リファレンスと freee CLI を使用した API 呼び出しガイドを提供。OAuth 認証とトークン管理を自動化し、経費申請、会計データ取得、人事情報管理など、freee の様々な機能を利用可能。"
     }
   ]
