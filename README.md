@@ -8,7 +8,7 @@ CLI と skill（API リファレンス）を組み合わせて利用すること
 
 [![npm version](https://badge.fury.io/js/%40yamitzky%2Ffreee.svg)](https://www.npmjs.com/package/@yamitzky/freee)
 
-> Note: このプロジェクトは開発中であり、予期せぬ不具合が発生する可能性があります。問題を発見された場合は [Issue](https://github.com/yamitzky/freee-mcp/issues) として報告していただけると幸いです。
+> Note: このプロジェクトは開発中であり、予期せぬ不具合が発生する可能性があります。問題を発見された場合は [Issue](https://github.com/yamitzky/freee-cli/issues) として報告していただけると幸いです。
 
 ## 特徴
 
@@ -83,7 +83,7 @@ freee --help                   # ヘルプ
 Claude Code でプラグインとしてインストールすると、Agent Skill（API リファレンス付きスキル）がまとめて利用できます。
 
 ```bash
-claude plugin install yamitzky/freee-mcp
+claude plugin install yamitzky/freee-cli
 ```
 
 ## Skill のみインストールする
@@ -91,7 +91,7 @@ claude plugin install yamitzky/freee-mcp
 Claude Code 以外のコーディングエージェント（Cursor, OpenCode など）で API リファレンス付きスキルを利用する場合は、[skills](https://www.npmjs.com/package/skills) でインストールできます。
 
 ```bash
-npx skills add yamitzky/freee-mcp
+npx skills add yamitzky/freee-cli
 ```
 
 グローバルインストール(`-g`)や特定スキルのみのインストール(`-s`)も可能です。
@@ -184,8 +184,8 @@ service: accounting, hr, invoice, pm, sm
 ## 開発者向け
 
 ```bash
-git clone https://github.com/yamitzky/freee-mcp.git
-cd freee-mcp
+git clone https://github.com/yamitzky/freee-cli.git
+cd freee-cli
 bun install
 
 bun run dev           # 開発サーバー（ウォッチモード）

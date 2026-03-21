@@ -1,20 +1,11 @@
 {
   "name": "freee-api",
   "version": "0.13.0",
-  "description": "freee API を MCP 経由で操作するためのスキル。詳細なAPIリファレンスと freee-mcp を使用した API 呼び出しガイドを提供。",
+  "description": "freee API を CLI & Agent Skill で操作するためのスキル。詳細な API リファレンスと freee CLI を使用した API 呼び出しガイドを提供。",
   "author": {
-    "name": "him0"
+    "name": "yamitzky"
   },
-  "repository": "https://github.com/freee/freee-mcp",
-  "mcpServers": {
-    "freee": {
-      "command": "npx",
-      "args": [
-        "freee-mcp",
-        "client"
-      ]
-    }
-  },
+  "repository": "https://github.com/yamitzky/freee-cli",
   "skills": [
     "./skills"
   ]

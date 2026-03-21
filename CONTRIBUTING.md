@@ -1,10 +1,10 @@
-# Contributing to freee-mcp
+# Contributing to freee CLI
 
-freee-mcp への関心とフィードバックをお寄せいただきありがとうございます！
+freee CLI への関心とフィードバックをお寄せいただきありがとうございます！
 
 ## コントリビューションの方針 / Contribution Policy
 
-freee-mcp では Issue ベースのコントリビューションを採用しています。
+freee CLI では Issue ベースのコントリビューションを採用しています。
 
 歓迎していること:
 
@@ -18,7 +18,7 @@ freee-mcp では Issue ベースのコントリビューションを採用して
 
 これは、プロジェクトの品質と一貫性を維持するための方針です。
 
-freee-mcp では AI を活用した開発フローを採用しています。
+freee CLI では AI を活用した開発フローを採用しています。
 
 1. Issue として提案・報告を受け取る
 2. メンテナーが Issue をもとに実装方針を検討する
@@ -30,5 +30,5 @@ freee-mcp では AI を活用した開発フローを採用しています。
 
 Issue を作成する際は、テンプレートに沿って記入してください。
 
-- [Bug Report / バグ報告](https://github.com/freee/freee-mcp/issues/new?template=bug_report.md)
-- [Feature Request / 機能要望](https://github.com/freee/freee-mcp/issues/new?template=feature_request.md)
+- [Bug Report / バグ報告](https://github.com/yamitzky/freee-cli/issues/new?template=bug_report.md)
+- [Feature Request / 機能要望](https://github.com/yamitzky/freee-cli/issues/new?template=feature_request.md)

@@ -58,4 +58,4 @@ const PACKAGE_VERSION = typeof __PACKAGE_VERSION__ !== 'undefined' ? __PACKAGE_V
  * Format follows RFC 7231: ProductName/Version (comments)
  * @see https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
  */
-export const USER_AGENT = `freee-cli/${PACKAGE_VERSION} (CLI; +https://github.com/yamitzky/freee-mcp)`;
+export const USER_AGENT = `freee-cli/${PACKAGE_VERSION} (CLI; +https://github.com/yamitzky/freee-cli)`;
