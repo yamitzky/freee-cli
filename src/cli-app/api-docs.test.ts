@@ -1,31 +1,39 @@
 import { describe, it, expect } from 'vitest';
-import { generateHelp, generateDocs, generateSpec } from './api-docs.js';
+import { generateMethodList, generateDocs, generateSpec } from './api-docs.js';
 
-describe('generateHelp', () => {
+describe('generateMethodList', () => {
   it('shows endpoint summary and available methods', () => {
-    const output = generateHelp('accounting', '/api/1/deals');
+    const output = generateMethodList('accounting', '/api/1/deals');
     expect(output).toContain('/api/1/deals');
     expect(output).toContain('GET');
     expect(output).toContain('POST');
   });
 
   it('shows help for parameterized paths', () => {
-    const output = generateHelp('accounting', '/api/1/deals/123');
+    const output = generateMethodList('accounting', '/api/1/deals/123');
     expect(output).toContain('/api/1/deals/{id}');
   });
 
   it('returns error message for unknown path', () => {
-    const output = generateHelp('accounting', '/api/1/nonexistent');
+    const output = generateMethodList('accounting', '/api/1/nonexistent');
     expect(output).toContain('見つかりません');
+  });
+
+  it('shows CLI-style hints', () => {
+    const output = generateMethodList('accounting', '/api/1/deals');
+    expect(output).toContain('freee accounting get');
+    expect(output).toContain('--help');
   });
 });
 
 describe('generateDocs', () => {
-  it('generates docs with parameter table', () => {
+  it('generates docs with parameter list', () => {
     const output = generateDocs('accounting', '/api/1/deals', 'GET');
     expect(output).toContain('company_id');
-    expect(output).toContain('query');
+    expect(output).toContain('デフォルト: 現在の事業所');
+    expect(output).not.toContain('company_id (必須)');
     expect(output).toContain('パラメータ');
+    expect(output).toContain('使い方');
   });
 
   it('generates docs for POST with request body', () => {
@@ -34,25 +42,29 @@ describe('generateDocs', () => {
     expect(output).toContain('issue_date');
   });
 
-  it('includes response schema', () => {
+  it('does not include response by default', () => {
     const output = generateDocs('accounting', '/api/1/deals', 'GET');
-    expect(output).toContain('レスポンス');
+    expect(output).not.toContain('レスポンス');
   });
 
-  it('shows all methods when method is not specified', () => {
-    const output = generateDocs('accounting', '/api/1/deals');
-    expect(output).toContain('GET');
-    expect(output).toContain('POST');
+  it('includes response when includeResponse is true', () => {
+    const output = generateDocs('accounting', '/api/1/deals', 'GET', { includeResponse: true });
+    expect(output).toContain('レスポンス');
   });
 
   it('resolves parameterized paths', () => {
     const output = generateDocs('accounting', '/api/1/deals/123', 'GET');
-    expect(output).toContain('/api/1/deals/{id}');
+    expect(output).toContain('deals/123');
   });
 
   it('returns error for unknown path', () => {
-    const output = generateDocs('accounting', '/api/1/nonexistent');
+    const output = generateDocs('accounting', '/api/1/nonexistent', 'GET');
     expect(output).toContain('見つかりません');
+  });
+
+  it('returns error for invalid method', () => {
+    const output = generateDocs('accounting', '/api/1/deals', 'PATCH');
+    expect(output).toContain('ありません');
   });
 });
 

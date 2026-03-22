@@ -83,7 +83,7 @@ describe('parseApiInput', () => {
     });
   });
 
-  it('should parse flags like --help, --docs, --spec', () => {
+  it('should parse flags like --help, --spec, --response', () => {
     const result = parseApiInput(['/api/1/deals', '--help']);
     expect(result).toEqual({
       path: '/api/1/deals',
@@ -95,13 +95,13 @@ describe('parseApiInput', () => {
   });
 
   it('should collect multiple flags', () => {
-    const result = parseApiInput(['/api/1/deals', '--help', '--docs']);
+    const result = parseApiInput(['/api/1/deals', '--help', '--response']);
     expect(result).toEqual({
       path: '/api/1/deals',
       method: undefined,
       query: {},
       body: undefined,
-      flags: ['--help', '--docs'],
+      flags: ['--help', '--response'],
     });
   });
 

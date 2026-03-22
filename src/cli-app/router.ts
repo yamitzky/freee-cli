@@ -15,7 +15,7 @@ const METHOD_SUBCOMMANDS: Record<string, string> = {
   patch: 'PATCH',
 };
 
-const SERVICE_SUBCOMMANDS = new Set(['ls', 'docs', 'help', 'spec']);
+const SERVICE_SUBCOMMANDS = new Set(['ls']);
 
 export function parseCommand(argv: string[]): ParsedCommand {
   if (argv.length === 0) {

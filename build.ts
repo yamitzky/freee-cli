@@ -42,7 +42,7 @@ for (const file of minimalFiles) {
 }
 console.log(`Copied ${minimalFiles.filter(f => f.endsWith('.json')).length} minimal schema files to dist/`);
 
-// Copy full schema files to dist for --docs/--spec
+// Copy full schema files to dist for --help/--spec
 const fullSrcDir = './openapi';
 const fullDestDir = './dist/openapi';
 const fullFiles = await readdir(fullSrcDir);
