@@ -116,7 +116,8 @@ export async function main(argv: string[]): Promise<void> {
       if (parsed.command === 'ls') {
         console.log(listEndpoints(service, parsed.args[0]));
       } else if (parsed.command === 'docs') {
-        console.log(generateDocs(service, parsed.args[0], parsed.args[1]));
+        const input = parseApiInput(parsed.args);
+        console.log(generateDocs(service, input.path, input.method));
       } else if (parsed.command === 'help') {
         console.log(generateHelp(service, parsed.args[0]));
       } else if (parsed.command === 'spec') {

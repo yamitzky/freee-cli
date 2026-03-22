@@ -185,9 +185,10 @@ function renderFields(
   schema: SchemaObject,
   root: OpenApiSchema,
   depth: number,
-  requiredFields?: string[]
+  requiredFields?: string[],
+  maxDepth = 3,
 ): string[] {
-  if (depth > 3) return [];
+  if (depth >= maxDepth) return [];
 
   const resolved = resolveRef(schema, root);
   const props = resolved.properties;
@@ -207,13 +208,13 @@ function renderFields(
     lines.push(`${indent}| ${name} | ${isRequired} | ${typeStr} | ${truncDesc} |`);
 
     // Recurse into nested objects
-    if (prop.type === 'object' && prop.properties && depth < 3) {
-      lines.push(...renderFields(prop, root, depth + 1));
+    if (prop.type === 'object' && prop.properties && depth < maxDepth - 1) {
+      lines.push(...renderFields(prop, root, depth + 1, undefined, maxDepth));
     }
-    if (prop.type === 'array' && prop.items && depth < 3) {
+    if (prop.type === 'array' && prop.items && depth < maxDepth - 1) {
       const itemResolved = resolveRef(prop.items, root);
       if (itemResolved.type === 'object' && itemResolved.properties) {
-        lines.push(...renderFields(itemResolved, root, depth + 1));
+        lines.push(...renderFields(itemResolved, root, depth + 1, undefined, maxDepth));
       }
     }
   }
@@ -312,7 +313,7 @@ export function generateDocs(service: ApiType, concretePath: string, method?: st
       }
     }
 
-    // Response
+    // Response (top-level fields only for compactness)
     const successCode = op.responses?.['200'] ? '200' : op.responses?.['201'] ? '201' : null;
     if (successCode) {
       const resp = op.responses?.[successCode];
@@ -322,8 +323,10 @@ export function generateDocs(service: ApiType, concretePath: string, method?: st
         sections.push('');
         sections.push('| 名前 | 必須 | 型 | 説明 |');
         sections.push('| --- | --- | --- | --- |');
-        const fields = renderFields(respSchema, fullSchema, 0);
+        const fields = renderFields(respSchema, fullSchema, 0, undefined, 1);
         sections.push(...fields);
+        sections.push('');
+        sections.push('(詳細は `freee ' + service + ' spec ' + concretePath + '` で確認)');
         sections.push('');
       }
     }
