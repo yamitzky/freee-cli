@@ -4,6 +4,7 @@ export interface ApiInput {
   query: Record<string, string>;
   body: Record<string, unknown> | undefined;
   flags: string[];
+  filePaths: string[];
 }
 
 function setNested(obj: Record<string, unknown>, keys: (string | number)[], value: unknown): void {
@@ -34,7 +35,7 @@ function parseBracketKeys(raw: string): (string | number)[] {
 
 export function parseApiInput(args: string[], methodOverride?: string): ApiInput {
   if (args.length === 0) {
-    return { path: '', method: methodOverride, query: {}, body: undefined, flags: [] };
+    return { path: '', method: methodOverride, query: {}, body: undefined, flags: [], filePaths: [] };
   }
 
   const path = args[0];
@@ -43,6 +44,7 @@ export function parseApiInput(args: string[], methodOverride?: string): ApiInput
   const query: Record<string, string> = {};
   let body: Record<string, unknown> | undefined;
   const flags: string[] = [];
+  const filePaths: string[] = [];
 
   let i = 1;
   while (i < args.length) {
@@ -108,7 +110,8 @@ export function parseApiInput(args: string[], methodOverride?: string): ApiInput
       continue;
     }
 
-    // Unknown arg, skip
+    // Unknown arg — treat as file path
+    filePaths.push(arg);
     i++;
   }
 
@@ -117,5 +120,5 @@ export function parseApiInput(args: string[], methodOverride?: string): ApiInput
     method = methodOverride;
   }
 
-  return { path, method, query, body, flags };
+  return { path, method, query, body, flags, filePaths };
 }

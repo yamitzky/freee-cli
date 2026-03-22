@@ -10,6 +10,7 @@ describe('parseApiInput', () => {
       query: { company_id: '123', type: 'income' },
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -21,6 +22,7 @@ describe('parseApiInput', () => {
       query: {},
       body: { type: 'income', issue_date: '2025-01-01' },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -32,6 +34,7 @@ describe('parseApiInput', () => {
       query: {},
       body: { details: [{ amount: '1000' }] },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -47,6 +50,7 @@ describe('parseApiInput', () => {
       query: {},
       body: { amount: 5000, details: [{ tax_code: 1 }] },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -58,6 +62,7 @@ describe('parseApiInput', () => {
       query: {},
       body: { type: 'income' },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -69,6 +74,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -80,6 +86,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -91,6 +98,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: ['--help'],
+      filePaths: [],
     });
   });
 
@@ -102,6 +110,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: ['--help', '--response'],
+      filePaths: [],
     });
   });
 
@@ -118,6 +127,7 @@ describe('parseApiInput', () => {
       query: { company_id: '123' },
       body: { type: 'income', amount: 5000 },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -129,6 +139,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -146,6 +157,7 @@ describe('parseApiInput', () => {
         details: [{ account_items: [{ id: '1', amount: '1000' }] }],
       },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -162,6 +174,7 @@ describe('parseApiInput', () => {
       query: { company_id: '123' },
       body: { type: 'income' },
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -173,6 +186,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -184,6 +198,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -195,6 +210,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 
@@ -206,6 +222,7 @@ describe('parseApiInput', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     });
   });
 });

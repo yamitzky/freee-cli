@@ -34,6 +34,7 @@ API:
   freee <service> ls [filter]           エンドポイント一覧（filterで絞込可）
   freee <service> get <path>            GET リクエスト
   freee <service> post <path>           POST リクエスト
+  freee <service> post receipts <file> ファイルアップロード
   freee <service> put <path>            PUT リクエスト
   freee <service> delete <path>         DELETE リクエスト
   freee <service> patch <path>          PATCH リクエスト
