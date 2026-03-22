@@ -268,14 +268,16 @@ export function generateDocs(service: ApiType, concretePath: string, method: str
   }
   lines.push('');
 
-  // Query parameters (company_id is auto-injected, hide from help)
-  const visibleQueryParams = queryParams.filter((p) => p.name !== 'company_id');
-  if (visibleQueryParams.length > 0) {
+  // Query parameters (company_id is auto-injected, so treat as optional)
+  if (queryParams.length > 0) {
     lines.push('パラメータ:');
-    for (const param of visibleQueryParams) {
-      const desc = param.description ? stripHtml(param.description) : '';
+    for (const param of queryParams) {
+      const isRequired = param.name === 'company_id' ? false : param.required === true;
+      const desc = param.name === 'company_id'
+        ? '事業所ID（デフォルト: 現在の事業所）'
+        : param.description ? stripHtml(param.description) : '';
       const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
-      lines.push(renderParamLine(param.name, param.required === true, truncDesc, '  '));
+      lines.push(renderParamLine(param.name, isRequired, truncDesc, '  '));
     }
     lines.push('');
   }
@@ -292,11 +294,13 @@ export function generateDocs(service: ApiType, concretePath: string, method: str
       if (props) {
         const required = new Set(resolved.required ?? []);
         for (const [name, propSchema] of Object.entries(props)) {
-          if (name === 'company_id') continue;
           const prop = resolveRef(propSchema, fullSchema);
-          const desc = prop.description ? stripHtml(prop.description) : '';
+          const isRequired = name === 'company_id' ? false : required.has(name);
+          const desc = name === 'company_id'
+            ? '事業所ID（デフォルト: 現在の事業所）'
+            : prop.description ? stripHtml(prop.description) : '';
           const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
-          lines.push(renderParamLine(name, required.has(name), truncDesc, '  '));
+          lines.push(renderParamLine(name, isRequired, truncDesc, '  '));
 
           // Show nested fields for arrays/objects (one level)
           if (prop.type === 'array' && prop.items) {

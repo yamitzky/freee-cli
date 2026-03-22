@@ -29,7 +29,9 @@ describe('generateMethodList', () => {
 describe('generateDocs', () => {
   it('generates docs with parameter list', () => {
     const output = generateDocs('accounting', '/api/1/deals', 'GET');
-    expect(output).not.toContain('company_id');
+    expect(output).toContain('company_id');
+    expect(output).toContain('デフォルト: 現在の事業所');
+    expect(output).not.toContain('company_id (必須)');
     expect(output).toContain('パラメータ');
     expect(output).toContain('使い方');
   });
