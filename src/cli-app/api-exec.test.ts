@@ -176,7 +176,7 @@ describe('executeApiRequest', () => {
     expect(result).toBe('File saved: /tmp/download.pdf');
   });
 
-  it('formats single resource as key-value pairs', async () => {
+  it('formats single resource with inline notation', async () => {
     mockedMakeApiRequest.mockResolvedValue({
       deal: {
         id: 123,
@@ -184,7 +184,8 @@ describe('executeApiRequest', () => {
         type: 'income',
         amount: 10000,
         company_id: 12345,
-        details: [{ id: 1 }],
+        partner: { id: 456, name: 'テスト株式会社' },
+        details: [{ id: 1, tax_code: 1, amount: 10000 }],
       },
     });
 
@@ -201,8 +202,8 @@ describe('executeApiRequest', () => {
     expect(result).toContain('deal:');
     expect(result).toContain('id\t123');
     expect(result).toContain('issue_date\t2026-01-15');
-    expect(result).toContain('type\tincome');
-    expect(result).not.toContain('details');
+    expect(result).toContain('partner\tid=456 name=テスト株式会社');
+    expect(result).toContain('details[0]\tid=1 tax_code=1 amount=10000');
   });
 
   it('returns "(no content)" for null response', async () => {

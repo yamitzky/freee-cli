@@ -34,7 +34,21 @@ function findSingleResource(data: Record<string, unknown>): { key: string; value
 }
 
 /**
- * Format a single resource as key-value pairs (scalar fields only).
+ * Format an object's scalar fields as inline key=value pairs.
+ */
+function formatInline(obj: Record<string, unknown>): string {
+  const parts: string[] = [];
+  for (const [k, v] of Object.entries(obj)) {
+    if (v !== null && typeof v === 'object') continue;
+    if (v === null || v === undefined) continue;
+    const s = String(v);
+    parts.push(`${k}=${s.length > 40 ? `${s.slice(0, 37)}...` : s}`);
+  }
+  return parts.join(' ');
+}
+
+/**
+ * Format a single resource with inline notation for nested objects/arrays.
  */
 function formatSingleResource(key: string, resource: Record<string, unknown>): string {
   const lines: string[] = [];
@@ -42,10 +56,24 @@ function formatSingleResource(key: string, resource: Record<string, unknown>): s
   lines.push('');
 
   for (const [field, value] of Object.entries(resource)) {
-    if (value !== null && typeof value === 'object') continue;
-    const displayValue = value === null || value === undefined ? '' : String(value);
-    const truncated = displayValue.length > 80 ? `${displayValue.slice(0, 77)}...` : displayValue;
-    lines.push(`  ${field}\t${truncated}`);
+    if (value === null || value === undefined) {
+      lines.push(`  ${field}\t`);
+    } else if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        const item = value[i];
+        if (typeof item === 'object' && item !== null) {
+          lines.push(`  ${field}[${i}]\t${formatInline(item as Record<string, unknown>)}`);
+        } else {
+          lines.push(`  ${field}[${i}]\t${String(item)}`);
+        }
+      }
+    } else if (typeof value === 'object') {
+      lines.push(`  ${field}\t${formatInline(value as Record<string, unknown>)}`);
+    } else {
+      const display = String(value);
+      const truncated = display.length > 80 ? `${display.slice(0, 77)}...` : display;
+      lines.push(`  ${field}\t${truncated}`);
+    }
   }
 
   return lines.join('\n');
