@@ -156,4 +156,4 @@ TypeScript / OAuth 2.0 + PKCE / Zod / Bun
 
 - [フォーク元: freee/freee-mcp](https://github.com/freee/freee-mcp) -- オリジナルの MCP サーバー実装
 - [freee API ドキュメント](https://developer.freee.co.jp/docs)
-- [紹介記事: Public API を MCP化するとき Agent Skill 併用が良さそう](https://zenn.dev/him0/articles/766798ca1315e0) -- フォーク元の設計思想
+- [freee を CLI から操作するツールと Agent Skill を作り、トークン効率を75％改善した](https://zenn.dev/yamitzky/articles/94c5e2264403bb)
