@@ -1,6 +1,6 @@
 {
   "name": "freee-cli",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "freee API を CLI & Agent Skill で操作するためのスキル。詳細な API リファレンスと freee CLI を使用した API 呼び出しガイドを提供。",
   "author": {
     "name": "yamitzky"
