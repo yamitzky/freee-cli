@@ -11,10 +11,9 @@ freee API を AI エージェントから操作するための CLI & Agent Skill
 ## 特徴
 
 - freee CLI: シェルから直接 freee API を操作（トークン効率の高いコンパクト出力）
-- Agent Skill: 詳細な API リファレンスドキュメント付きスキルを提供
+- Agent Skill: CLI の使い方をガイドするスキルを提供
 - 複数 API 対応: 会計・人事労務・請求書・工数管理・販売の5つの freee API をサポート
 - OAuth 2.0 + PKCE: セキュアな認証フロー、トークン自動更新
-- 複数事業所対応: 事業所の動的切り替えが可能
 
 ## SKILL と CLI の連携の流れ
 
@@ -80,46 +79,12 @@ freee accounting get deals     # 取引一覧を取得
 freee --help                   # ヘルプ
 ```
 
-## Claude Code Plugin として使う
+## Agent Skill のインストール
 
-Claude Code でプラグインとしてインストールすると、Agent Skill（API リファレンス付きスキル）がまとめて利用できます。
-
-```bash
-claude plugin install yamitzky/freee-cli
-```
-
-## Skill のみインストールする
-
-Claude Code 以外のコーディングエージェント（Cursor, OpenCode など）で API リファレンス付きスキルを利用する場合は、[skills](https://www.npmjs.com/package/skills) でインストールできます。
+コーディングエージェント（Claude Code, Cursor, OpenCode など）で API リファレンス付きスキルを利用する場合は、[skills](https://www.npmjs.com/package/skills) でインストールできます。
 
 ```bash
 npx skills add yamitzky/freee-cli
-```
-
-グローバルインストール(`-g`)や特定スキルのみのインストール(`-s`)も可能です。
-
-### 含まれるリファレンス
-
-| API      | 内容                                             | ファイル数 |
-| -------- | ------------------------------------------------ | ---------- |
-| 会計     | 取引、勘定科目、取引先、請求書、経費申請など     | 31         |
-| 人事労務 | 従業員、勤怠、給与明細、年末調整など             | 28         |
-| 請求書   | 請求書、見積書、納品書                           | 3          |
-| 工数管理 | プロジェクト、チーム、パートナー、工数、ユーザーなど | 7          |
-| 販売     | 案件、受注、マスタ                               | 3          |
-
-Claude との会話中に API の使い方を質問すると、これらのリファレンスを参照して正確な情報を提供します。
-
-### データ作成のベストプラクティス
-
-請求書や経費精算など、同じ形式のデータを繰り返し作成する場合は、以前に作成したデータを参照することで効率的に作業できます：
-
-- 請求書作成: 過去の請求書を取得して、取引先・品目・税区分などを参考にする
-- 経費精算: 過去の申請を参照して、勘定科目や部門の指定を正確に行う
-- 取引登録: 類似の取引を参考にして、入力ミスを防ぐ
-
-```
-例: 「先月の○○社への請求書を参考に、今月分を作成して」
 ```
 
 ## freee CLI コマンド
@@ -169,9 +134,6 @@ bun run build         # ビルド
 bun run typecheck    # 型チェック
 bun run lint          # リント
 bun run test:run      # テスト
-
-# API リファレンスの再生成
-bun run generate:references
 ```
 
 ### 技術スタック
