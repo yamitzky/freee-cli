@@ -42,6 +42,7 @@ freee API CLI & Agent Skill:
 - `freee <service> ls [filter]` - エンドポイント一覧
 - `freee <service> get <path> key==val` - GET リクエスト
 - `freee <service> post <path> key=val` - POST リクエスト
+- `freee <service> post receipts <file>` - ファイルアップロード
 - `freee <service> put <path> -d '{}'` - PUT リクエスト
 - `freee <service> delete <path>` - DELETE リクエスト
 - `freee <service> <path> --help` - メソッド一覧

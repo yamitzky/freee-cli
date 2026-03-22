@@ -1,4 +1,5 @@
 import { makeApiRequest } from '../api/client.js';
+import { uploadReceipt } from '../api/file-upload.js';
 import { getValidAccessToken } from '../auth/tokens.js';
 import { getCurrentCompanyId } from '../config/companies.js';
 import { validatePathForService, type ApiType } from '../openapi/schema-loader.js';
@@ -158,6 +159,25 @@ export async function executeApiRequest(service: ApiType, input: ApiInput): Prom
   let body = input.body;
   if (body && companyId && !('company_id' in body)) {
     body = { ...body, company_id: Number(companyId) };
+  }
+
+  // File upload: freee accounting post receipts /path/to/file.pdf
+  if (input.filePaths.length > 0 && apiPath.endsWith('/receipts') && method === 'POST') {
+    const filePath = input.filePaths[0];
+    const options: Record<string, string | number> = {};
+    if (body) {
+      for (const [k, v] of Object.entries(body)) {
+        if (k !== 'company_id') options[k] = v as string | number;
+      }
+    }
+    const result = await uploadReceipt(filePath, options);
+    const useJson = input.flags.includes('--json');
+    if (useJson) return JSON.stringify(result, null, 2);
+    if (typeof result === 'object' && result !== null) {
+      const singleResource = findSingleResource(result as Record<string, unknown>);
+      if (singleResource) return formatSingleResource(singleResource.key, singleResource.value);
+    }
+    return JSON.stringify(result, null, 2);
   }
 
   if (input.flags.includes('--verbose')) {

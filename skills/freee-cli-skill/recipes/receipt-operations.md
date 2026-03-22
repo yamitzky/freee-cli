@@ -14,21 +14,16 @@ freee会計APIとカスタムツールを使ったファイルボックスの操
 | `/api/1/receipts/{id}` | 証憑ファイル詳細・更新・削除 |
 | `/api/1/receipts/{id}/download` | 証憑ファイルのダウンロード |
 
-## ファイルアップロード
+## 使用例
 
-### 現在のサポート状況
+### ファイルアップロード
 
-freee CLI では、ファイルボックスへのファイルアップロード機能は未実装です。
-APIの `POST /api/1/receipts` は multipart/form-data が必要なため、CLI ツールでの対応が保留中です。
+```bash
+freee accounting post receipts /path/to/receipt.pdf
+freee accounting post receipts /path/to/invoice.jpg description=出張費 document_type=receipt
+```
 
-### 直接 API を使用したアップロード
-
-freee API を直接呼び出してファイルをアップロードする場合は、公式の freee API ドキュメントを参照してください：
-https://developer.freee.co.jp/docs/accounting
-
-POST `/api/1/receipts` に multipart/form-data でリクエストを送信することでアップロード可能です。
-
-アップロード時に指定可能なメタデータ:
+オプションのメタデータ:
 
 | パラメータ | 説明 |
 |-----------|------|
@@ -38,8 +33,6 @@ POST `/api/1/receipts` に multipart/form-data でリクエストを送信する
 | receipt_metadatum_issue_date | 発行日 (yyyy-mm-dd) |
 | receipt_metadatum_partner_name | 取引先名（最大255文字） |
 | qualified_invoice | 適格請求書等: qualified, not_qualified, unselected |
-
-## 使用例
 
 ### 証憑ファイル一覧を取得
 
@@ -120,4 +113,4 @@ https://secure.freee.co.jp/receipts/{id}
 
 ## リファレンス
 
-詳細なAPIパラメータは `references/accounting-receipts.md` を参照。
+詳細なAPIパラメータは `freee accounting post receipts --help` で確認。
