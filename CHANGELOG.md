@@ -1,5 +1,14 @@
 # freee-mcp
 
+## 0.2.1
+
+### Patch Changes
+
+- CLI からファイルアップロード対応
+
+  - `freee accounting post receipts /path/to/file.pdf` でファイルボックスにアップロード可能に
+  - メタデータも指定可能: `description=メモ document_type=receipt`
+
 ## 0.2.0
 
 ### Minor Changes
