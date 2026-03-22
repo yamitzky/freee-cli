@@ -58,6 +58,7 @@ describe('executeApiRequest', () => {
       query: { limit: '10' },
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -81,6 +82,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: { issue_date: '2026-01-01' },
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -104,6 +106,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -127,6 +130,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -147,6 +151,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -169,6 +174,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -195,6 +201,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
@@ -215,6 +222,7 @@ describe('executeApiRequest', () => {
       query: {},
       body: undefined,
       flags: [],
+      filePaths: [],
     };
 
     const result = await executeApiRequest('accounting', input);
