@@ -40,12 +40,13 @@ freee API CLI & Agent Skill:
 - `freee configure` - OAuth認証と事業所の対話式セットアップ
 - `freee configure --force` - 保存済みのログイン情報をリセットして再設定
 - `freee <service> ls [filter]` - エンドポイント一覧
-- `freee <service> docs <path>` - API ドキュメント
-- `freee <service> help <path>` - メソッド一覧
 - `freee <service> get <path> key==val` - GET リクエスト
 - `freee <service> post <path> key=val` - POST リクエスト
 - `freee <service> put <path> -d '{}'` - PUT リクエスト
 - `freee <service> delete <path>` - DELETE リクエスト
+- `freee <service> <path> --help` - メソッド一覧
+- `freee <service> get <path> --help` - パラメータのドキュメント
+- `freee <service> get <path> --spec` - 生の OpenAPI スキーマ
 
 ### Configuration
 
