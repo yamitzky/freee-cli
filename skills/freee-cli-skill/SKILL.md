@@ -20,9 +20,7 @@ CLI is self-documenting. Always run these instead of guessing:
 
 ## Install
 
-```bash
-npx @yamitzky/freee --help
-```
+If `freee` command is not found, use `npx @yamitzky/freee` instead.
 
 ## Authentication
 

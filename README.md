@@ -118,11 +118,10 @@ service: accounting, hr, invoice, pm, sm
 
 ### company_id の取り扱い
 
-リクエスト（パラメータまたはボディ）に `company_id` を含める場合、現在の事業所と一致している必要があります。不一致の場合はエラーになります。
+`company_id` は現在の事業所が自動的に使用されます。明示的に指定すると別の事業所を操作できます。
 
 - 事業所の確認: `freee company current`
 - 事業所の切り替え: `freee company set <id>`
-- company_id を含まない API（例: `/api/1/companies`）はそのまま実行可能
 
 ## 開発者向け
 
