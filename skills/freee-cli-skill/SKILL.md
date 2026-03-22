@@ -20,11 +20,7 @@ CLI is self-documenting. Always run these instead of guessing:
 
 ## Install
 
-If `freee` command is not found, install it:
-
-```bash
-npm install -g @yamitzky/freee
-```
+If `freee` command is not found, use `npx @yamitzky/freee` instead.
 
 ## Authentication
 
