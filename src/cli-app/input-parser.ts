@@ -63,7 +63,7 @@ export function parseApiInput(args: string[], methodOverride?: string): ApiInput
       continue;
     }
 
-    // flags (--help, --docs, --spec, etc.)
+    // flags (--help, --spec, --response, etc.)
     if (arg.startsWith('--')) {
       flags.push(arg);
       i++;

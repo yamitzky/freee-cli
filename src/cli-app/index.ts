@@ -1,7 +1,7 @@
 import { loadConfig } from '../config.js';
 import { configure } from '../cli.js';
 import type { ApiType } from '../openapi/schema-loader.js';
-import { generateDocs, generateHelp, generateSpec } from './api-docs.js';
+import { generateDocs, generateMethodList, generateSpec } from './api-docs.js';
 import { executeApiRequest } from './api-exec.js';
 import { listEndpoints } from './api-list.js';
 import { handleAuth } from './auth.js';
@@ -37,12 +37,15 @@ API:
   freee <service> put <path>            PUT リクエスト
   freee <service> delete <path>         DELETE リクエスト
   freee <service> patch <path>          PATCH リクエスト
-  freee <service> docs <path>           コンパクトなAPIドキュメントを表示
-  freee <service> help <path>           エンドポイントの詳細を表示
-  freee <service> spec <path>           生の OpenAPI スキーマを表示
 
   service: accounting, hr, invoice, pm, sm
   path: deals, approval_requests, partners, etc. (/api/1/ は省略可)
+
+  Docs:
+    freee <service> <path> --help             メソッド一覧を表示
+    freee <service> get <path> --help         パラメータのドキュメントを表示
+    freee <service> get <path> --help --response  レスポンスも含めて表示
+    freee <service> get <path> --spec         生の OpenAPI スキーマを表示
 
   Input syntax:
     key==val    クエリパラメータ
@@ -61,11 +64,12 @@ Options:
 async function handleApiCommand(service: ApiType, method: string | undefined, args: string[]): Promise<void> {
   const input = parseApiInput(args, method);
   if (input.flags.includes('--help')) {
-    console.log(generateHelp(service, input.path));
-    return;
-  }
-  if (input.flags.includes('--docs')) {
-    console.log(generateDocs(service, input.path, input.method));
+    if (input.method) {
+      const includeResponse = input.flags.includes('--response');
+      console.log(generateDocs(service, input.path, input.method, { includeResponse }));
+    } else {
+      console.log(generateMethodList(service, input.path));
+    }
     return;
   }
   if (input.flags.includes('--spec')) {
@@ -115,13 +119,6 @@ export async function main(argv: string[]): Promise<void> {
       const service = parsed.group as ApiType;
       if (parsed.command === 'ls') {
         console.log(listEndpoints(service, parsed.args[0]));
-      } else if (parsed.command === 'docs') {
-        const input = parseApiInput(parsed.args);
-        console.log(generateDocs(service, input.path, input.method));
-      } else if (parsed.command === 'help') {
-        console.log(generateHelp(service, parsed.args[0]));
-      } else if (parsed.command === 'spec') {
-        console.log(generateSpec(service, parsed.args[0]));
       } else if (parsed.command === 'api') {
         await handleApiCommand(service, parsed.method, parsed.args);
       } else {

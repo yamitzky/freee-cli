@@ -14,8 +14,9 @@ description: >-
 CLI is self-documenting. Always run these instead of guessing:
 
 - `freee accounting ls [filter]` -- list endpoints (filter by keyword).
-- `freee accounting docs <path>` -- compact API docs (params, response).
-- `freee accounting help <path>` -- show methods for an endpoint.
+- `freee accounting get <path> --help` -- show params for GET.
+- `freee accounting post <path> --help` -- show params/body for POST.
+- `freee accounting <path> --help` -- list available methods.
 
 ## Install
 

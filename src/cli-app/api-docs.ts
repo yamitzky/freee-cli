@@ -181,52 +181,11 @@ function getTypeString(schema: SchemaObject, root: OpenApiSchema): string {
   return resolved.type ?? 'object';
 }
 
-function renderFields(
-  schema: SchemaObject,
-  root: OpenApiSchema,
-  depth: number,
-  requiredFields?: string[],
-  maxDepth = 3,
-): string[] {
-  if (depth >= maxDepth) return [];
-
-  const resolved = resolveRef(schema, root);
-  const props = resolved.properties;
-  if (!props) return [];
-
-  const required = new Set(requiredFields ?? resolved.required ?? []);
-  const lines: string[] = [];
-  const indent = '  '.repeat(depth);
-
-  for (const [name, propSchema] of Object.entries(props)) {
-    const prop = resolveRef(propSchema, root);
-    const typeStr = getTypeString(propSchema, root);
-    const isRequired = required.has(name) ? 'Yes' : '';
-    const desc = prop.description ? stripHtml(prop.description) : '';
-    const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
-
-    lines.push(`${indent}| ${name} | ${isRequired} | ${typeStr} | ${truncDesc} |`);
-
-    // Recurse into nested objects
-    if (prop.type === 'object' && prop.properties && depth < maxDepth - 1) {
-      lines.push(...renderFields(prop, root, depth + 1, undefined, maxDepth));
-    }
-    if (prop.type === 'array' && prop.items && depth < maxDepth - 1) {
-      const itemResolved = resolveRef(prop.items, root);
-      if (itemResolved.type === 'object' && itemResolved.properties) {
-        lines.push(...renderFields(itemResolved, root, depth + 1, undefined, maxDepth));
-      }
-    }
-  }
-
-  return lines;
-}
-
 // ---- Public API ----
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
-export function generateHelp(service: ApiType, concretePath: string): string {
+export function generateMethodList(service: ApiType, concretePath: string): string {
   const schemaPath = resolveSchemaPath(service, concretePath);
   if (!schemaPath) {
     return `パス '${concretePath}' は ${API_CONFIGS[service].name} に見つかりません。`;
@@ -244,15 +203,24 @@ export function generateHelp(service: ApiType, concretePath: string): string {
     if (!op) continue;
     const summary = op.summary ?? '';
     lines.push(`  ${method.toUpperCase()}  ${summary}`);
-    lines.push(`    docs: freee ${service} ${schemaPath} --docs${method !== 'get' ? ` --method ${method.toUpperCase()}` : ''}`);
-    lines.push(`    spec: freee ${service} ${schemaPath} --spec`);
+    lines.push(`    freee ${service} ${method} ${concretePath} --help`);
     lines.push('');
   }
 
   return lines.join('\n');
 }
 
-export function generateDocs(service: ApiType, concretePath: string, method?: string): string {
+interface GenerateDocsOptions {
+  includeResponse?: boolean;
+}
+
+function renderParamLine(name: string, required: boolean, desc: string, indent = ''): string {
+  const reqMark = required ? ' (必須)' : '';
+  const padding = Math.max(1, 28 - indent.length - name.length - reqMark.length);
+  return `${indent}${name}${reqMark}${' '.repeat(padding)}${desc}`;
+}
+
+export function generateDocs(service: ApiType, concretePath: string, method: string, options: GenerateDocsOptions = {}): string {
   const schemaPath = resolveSchemaPath(service, concretePath);
   if (!schemaPath) {
     return `パス '${concretePath}' は ${API_CONFIGS[service].name} に見つかりません。`;
@@ -264,75 +232,116 @@ export function generateDocs(service: ApiType, concretePath: string, method?: st
     return `パス '${schemaPath}' のスキーマが見つかりません。`;
   }
 
-  const methods = method
-    ? [method.toLowerCase() as (typeof HTTP_METHODS)[number]]
-    : HTTP_METHODS.filter((m) => pathItem[m]);
+  const m = method.toLowerCase() as (typeof HTTP_METHODS)[number];
+  const op = pathItem[m];
+  if (!op) {
+    return `${method.toUpperCase()} メソッドは ${schemaPath} にありません。`;
+  }
 
-  const sections: string[] = [];
-  sections.push(`# ${API_CONFIGS[service].name}: ${schemaPath}`);
-  sections.push('');
+  const lines: string[] = [];
 
-  for (const m of methods) {
-    const op = pathItem[m];
-    if (!op) continue;
+  // Header
+  lines.push(`freee ${service} ${m} ${concretePath}`);
+  if (op.summary) lines.push(op.summary);
+  lines.push('');
 
-    sections.push(`## ${m.toUpperCase()} ${schemaPath}`);
-    if (op.summary) sections.push(`${op.summary}`);
-    sections.push('');
-
-    // Parameters
-    if (op.parameters && op.parameters.length > 0) {
-      sections.push('### パラメータ');
-      sections.push('');
-      sections.push('| 名前 | 位置 | 必須 | 型 | 説明 |');
-      sections.push('| --- | --- | --- | --- | --- |');
-      for (const rawParam of op.parameters) {
-        const param = resolveParamRef(rawParam, fullSchema);
-        const paramType = param.schema?.type ?? param.type ?? 'string';
-        const required = param.required ? 'Yes' : '';
-        const desc = param.description ? stripHtml(param.description) : '';
-        const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
-        sections.push(`| ${param.name} | ${param.in} | ${required} | ${paramType} | ${truncDesc} |`);
-      }
-      sections.push('');
+  // Usage examples
+  const pathParams: ParameterObject[] = [];
+  const queryParams: ParameterObject[] = [];
+  if (op.parameters) {
+    for (const rawParam of op.parameters) {
+      const param = resolveParamRef(rawParam, fullSchema);
+      if (param.in === 'path') pathParams.push(param);
+      else if (param.in === 'query') queryParams.push(param);
     }
+  }
 
-    // Request body
-    if (op.requestBody) {
-      const bodySchema =
-        op.requestBody.content?.['application/json']?.schema ??
-        op.requestBody.content?.['application/x-www-form-urlencoded']?.schema;
-      if (bodySchema) {
-        sections.push('### リクエストボディ');
-        sections.push('');
-        sections.push('| 名前 | 必須 | 型 | 説明 |');
-        sections.push('| --- | --- | --- | --- |');
-        const fields = renderFields(bodySchema, fullSchema, 0);
-        sections.push(...fields);
-        sections.push('');
-      }
+  lines.push('使い方:');
+  lines.push(`  freee ${service} ${m} ${concretePath}`);
+  // Show example with a few common query params
+  const exampleParams = queryParams
+    .filter((p) => p.name !== 'company_id' && p.name !== 'offset')
+    .slice(0, 2);
+  if (exampleParams.length > 0) {
+    const exampleParts = exampleParams.map((p) => `${p.name}==...`).join(' ');
+    lines.push(`  freee ${service} ${m} ${concretePath} ${exampleParts}`);
+  }
+  lines.push('');
+
+  // Query parameters (company_id is auto-injected, hide from help)
+  const visibleQueryParams = queryParams.filter((p) => p.name !== 'company_id');
+  if (visibleQueryParams.length > 0) {
+    lines.push('パラメータ:');
+    for (const param of visibleQueryParams) {
+      const desc = param.description ? stripHtml(param.description) : '';
+      const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
+      lines.push(renderParamLine(param.name, param.required === true, truncDesc, '  '));
     }
+    lines.push('');
+  }
 
-    // Response (top-level fields only for compactness)
+  // Request body
+  if (op.requestBody) {
+    const bodySchema =
+      op.requestBody.content?.['application/json']?.schema ??
+      op.requestBody.content?.['application/x-www-form-urlencoded']?.schema;
+    if (bodySchema) {
+      lines.push('リクエストボディ:');
+      const resolved = resolveRef(bodySchema, fullSchema);
+      const props = resolved.properties;
+      if (props) {
+        const required = new Set(resolved.required ?? []);
+        for (const [name, propSchema] of Object.entries(props)) {
+          if (name === 'company_id') continue;
+          const prop = resolveRef(propSchema, fullSchema);
+          const desc = prop.description ? stripHtml(prop.description) : '';
+          const truncDesc = desc.length > 60 ? `${desc.substring(0, 57)}...` : desc;
+          lines.push(renderParamLine(name, required.has(name), truncDesc, '  '));
+
+          // Show nested fields for arrays/objects (one level)
+          if (prop.type === 'array' && prop.items) {
+            const itemResolved = resolveRef(prop.items, fullSchema);
+            if (itemResolved.properties) {
+              const itemRequired = new Set(itemResolved.required ?? []);
+              for (const [subName, subSchema] of Object.entries(itemResolved.properties)) {
+                const sub = resolveRef(subSchema, fullSchema);
+                const subDesc = sub.description ? stripHtml(sub.description) : '';
+                const truncSubDesc = subDesc.length > 50 ? `${subDesc.substring(0, 47)}...` : subDesc;
+                lines.push(renderParamLine(subName, itemRequired.has(subName), truncSubDesc, '    '));
+              }
+            }
+          }
+        }
+      }
+      lines.push('');
+    }
+  }
+
+  // Response (only when --response flag is specified)
+  if (options.includeResponse) {
     const successCode = op.responses?.['200'] ? '200' : op.responses?.['201'] ? '201' : null;
     if (successCode) {
       const resp = op.responses?.[successCode];
       const respSchema = resp?.content?.['application/json']?.schema;
       if (respSchema) {
-        sections.push('### レスポンス');
-        sections.push('');
-        sections.push('| 名前 | 必須 | 型 | 説明 |');
-        sections.push('| --- | --- | --- | --- |');
-        const fields = renderFields(respSchema, fullSchema, 0, undefined, 1);
-        sections.push(...fields);
-        sections.push('');
-        sections.push('(詳細は `freee ' + service + ' spec ' + concretePath + '` で確認)');
-        sections.push('');
+        lines.push('レスポンス:');
+        const resolved = resolveRef(respSchema, fullSchema);
+        const props = resolved.properties;
+        if (props) {
+          const required = new Set(resolved.required ?? []);
+          for (const [name, propSchema] of Object.entries(props)) {
+            const typeStr = getTypeString(propSchema, fullSchema);
+            lines.push(renderParamLine(name, required.has(name), typeStr, '  '));
+          }
+        }
+        lines.push('');
+        lines.push(`(詳細は \`freee ${service} ${m} ${concretePath} --spec\` で確認)`);
+        lines.push('');
       }
     }
   }
 
-  return sections.join('\n');
+  return lines.join('\n');
 }
 
 export function generateSpec(service: ApiType, concretePath: string): string {

@@ -105,12 +105,14 @@ npx skills add yamitzky/freee-cli
 | コマンド | 説明 |
 |---------|------|
 | `freee <service> ls [filter]` | エンドポイント一覧 |
-| `freee <service> docs <path>` | API ドキュメント |
-| `freee <service> help <path>` | メソッド一覧 |
 | `freee <service> get <path> key==val` | クエリ付き GET |
 | `freee <service> post <path> key=val` | POST リクエスト |
 | `freee <service> put <path> -d '{}'` | PUT リクエスト |
 | `freee <service> delete <path>` | DELETE リクエスト |
+| `freee <service> <path> --help` | メソッド一覧を表示 |
+| `freee <service> get <path> --help` | パラメータのドキュメント |
+| `freee <service> get <path> --help --response` | レスポンスも含めて表示 |
+| `freee <service> get <path> --spec` | 生の OpenAPI スキーマ |
 
 service: accounting, hr, invoice, pm, sm
 

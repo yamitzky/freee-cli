@@ -165,31 +165,13 @@ describe('parseCommand', () => {
     });
   });
 
-  // Service subcommand tests
-  it('should parse accounting docs deals as docs command', () => {
+  // docs/help/spec are no longer subcommands, they route as api commands
+  it('should parse accounting docs deals as api command (legacy)', () => {
     expect(parseCommand(['accounting', 'docs', 'deals'])).toEqual({
       group: 'accounting',
-      command: 'docs',
+      command: 'api',
       method: undefined,
-      args: ['deals'],
-    });
-  });
-
-  it('should parse accounting help deals as help command', () => {
-    expect(parseCommand(['accounting', 'help', 'deals'])).toEqual({
-      group: 'accounting',
-      command: 'help',
-      method: undefined,
-      args: ['deals'],
-    });
-  });
-
-  it('should parse accounting spec deals as spec command', () => {
-    expect(parseCommand(['accounting', 'spec', 'deals'])).toEqual({
-      group: 'accounting',
-      command: 'spec',
-      method: undefined,
-      args: ['deals'],
+      args: ['docs', 'deals'],
     });
   });
 
