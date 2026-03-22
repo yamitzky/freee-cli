@@ -176,6 +176,35 @@ describe('executeApiRequest', () => {
     expect(result).toBe('File saved: /tmp/download.pdf');
   });
 
+  it('formats single resource as key-value pairs', async () => {
+    mockedMakeApiRequest.mockResolvedValue({
+      deal: {
+        id: 123,
+        issue_date: '2026-01-15',
+        type: 'income',
+        amount: 10000,
+        company_id: 12345,
+        details: [{ id: 1 }],
+      },
+    });
+
+    const input: ApiInput = {
+      path: '/api/1/deals/123',
+      method: undefined,
+      query: {},
+      body: undefined,
+      flags: [],
+    };
+
+    const result = await executeApiRequest('accounting', input);
+
+    expect(result).toContain('deal:');
+    expect(result).toContain('id\t123');
+    expect(result).toContain('issue_date\t2026-01-15');
+    expect(result).toContain('type\tincome');
+    expect(result).not.toContain('details');
+  });
+
   it('returns "(no content)" for null response', async () => {
     mockedMakeApiRequest.mockResolvedValue(null);
 

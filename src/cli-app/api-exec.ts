@@ -20,6 +20,38 @@ function findMainArray(data: Record<string, unknown>): { key: string; items: unk
 }
 
 /**
+ * Find a single resource object in a response.
+ * freee APIs return { "deal": { ... } } for single-resource endpoints.
+ */
+function findSingleResource(data: Record<string, unknown>): { key: string; value: Record<string, unknown> } | null {
+  const entries = Object.entries(data);
+  for (const [key, value] of entries) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      return { key, value: value as Record<string, unknown> };
+    }
+  }
+  return null;
+}
+
+/**
+ * Format a single resource as key-value pairs (scalar fields only).
+ */
+function formatSingleResource(key: string, resource: Record<string, unknown>): string {
+  const lines: string[] = [];
+  lines.push(`${key}:`);
+  lines.push('');
+
+  for (const [field, value] of Object.entries(resource)) {
+    if (value !== null && typeof value === 'object') continue;
+    const displayValue = value === null || value === undefined ? '' : String(value);
+    const truncated = displayValue.length > 80 ? `${displayValue.slice(0, 77)}...` : displayValue;
+    lines.push(`  ${field}\t${truncated}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Format response as compact table (TSV-like).
  * Extracts top-level fields from array items, truncates to maxItems.
  */
@@ -32,7 +64,11 @@ function formatCompact(data: unknown, maxItems: number): string {
   const mainArray = findMainArray(obj);
 
   if (!mainArray || mainArray.items.length === 0) {
-    // No array found or empty — show as compact JSON
+    // Try to find a single resource object (e.g. { "deal": { ... } })
+    const singleResource = findSingleResource(obj);
+    if (singleResource) {
+      return formatSingleResource(singleResource.key, singleResource.value);
+    }
     return JSON.stringify(data, null, 2);
   }
 
