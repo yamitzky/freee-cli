@@ -87,6 +87,16 @@ Common issues:
 - Missing return type annotations on exported functions
 - Undefined environment variables in tests
 
+## Release Flow
+
+1. `.changeset/<短い説明>.md` を作成（frontmatter に bump type、本文に変更内容）
+2. `bun run version` でバージョン更新 + CHANGELOG.md 生成（自動コミットされる）
+3. `git push origin main`
+4. `gh workflow run publish.yml --ref main` で Publish ワークフローを手動実行
+5. GitHub 上で environment の承認を行う（npm-publish environment の approval が必要）
+
+Publish ワークフローが GitHub Release 作成 + npm publish を行う。
+
 ## Writing Style
 
 - Do not use markdown bold syntax (`**`)  in any files
