@@ -50,12 +50,10 @@
     "zod": "^3.25.76"
   },
   "keywords": [
-    "mcp",
-    "model-context-protocol",
     "freee",
     "api",
     "accounting",
-    "claude"
+    "cli"
   ],
   "repository": {
     "type": "git",
