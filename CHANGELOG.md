@@ -1,5 +1,19 @@
 # freee-mcp
 
+## 0.2.0
+
+### Minor Changes
+
+- CLI ヘルプの再設計と company_id 修正
+
+  - docs/help/spec サブコマンドを廃止し --help / --spec フラグに統一
+  - --help の出力を CLI ヘルプ形式に変更（使い方の例付き、テーブル廃止）
+  - レスポンスをデフォルト非表示にし --response フラグで段階的開示
+  - company_id の明示指定で別事業所を操作可能に（一致チェック削除）
+  - company_id をヘルプで optional パラメータとして表示
+  - 単一リソースのレスポンスをインライン表記でコンパクト表示
+  - references ディレクトリ削除、SKILL.md スリム化
+
 ## 0.1.1
 
 ### Patch Changes
