@@ -20,6 +20,66 @@ function findMainArray(data: Record<string, unknown>): { key: string; items: unk
 }
 
 /**
+ * Find a single resource object in a response.
+ * freee APIs return { "deal": { ... } } for single-resource endpoints.
+ */
+function findSingleResource(data: Record<string, unknown>): { key: string; value: Record<string, unknown> } | null {
+  const entries = Object.entries(data);
+  for (const [key, value] of entries) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      return { key, value: value as Record<string, unknown> };
+    }
+  }
+  return null;
+}
+
+/**
+ * Format an object's scalar fields as inline key=value pairs.
+ */
+function formatInline(obj: Record<string, unknown>): string {
+  const parts: string[] = [];
+  for (const [k, v] of Object.entries(obj)) {
+    if (v !== null && typeof v === 'object') continue;
+    if (v === null || v === undefined) continue;
+    const s = String(v);
+    parts.push(`${k}=${s.length > 40 ? `${s.slice(0, 37)}...` : s}`);
+  }
+  return parts.join(' ');
+}
+
+/**
+ * Format a single resource with inline notation for nested objects/arrays.
+ */
+function formatSingleResource(key: string, resource: Record<string, unknown>): string {
+  const lines: string[] = [];
+  lines.push(`${key}:`);
+  lines.push('');
+
+  for (const [field, value] of Object.entries(resource)) {
+    if (value === null || value === undefined) {
+      lines.push(`  ${field}\t`);
+    } else if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        const item = value[i];
+        if (typeof item === 'object' && item !== null) {
+          lines.push(`  ${field}[${i}]\t${formatInline(item as Record<string, unknown>)}`);
+        } else {
+          lines.push(`  ${field}[${i}]\t${String(item)}`);
+        }
+      }
+    } else if (typeof value === 'object') {
+      lines.push(`  ${field}\t${formatInline(value as Record<string, unknown>)}`);
+    } else {
+      const display = String(value);
+      const truncated = display.length > 80 ? `${display.slice(0, 77)}...` : display;
+      lines.push(`  ${field}\t${truncated}`);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Format response as compact table (TSV-like).
  * Extracts top-level fields from array items, truncates to maxItems.
  */
@@ -32,7 +92,11 @@ function formatCompact(data: unknown, maxItems: number): string {
   const mainArray = findMainArray(obj);
 
   if (!mainArray || mainArray.items.length === 0) {
-    // No array found or empty — show as compact JSON
+    // Try to find a single resource object (e.g. { "deal": { ... } })
+    const singleResource = findSingleResource(obj);
+    if (singleResource) {
+      return formatSingleResource(singleResource.key, singleResource.value);
+    }
     return JSON.stringify(data, null, 2);
   }
 
