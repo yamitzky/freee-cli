@@ -20,11 +20,14 @@ CLI is self-documenting. Always run these instead of guessing:
 
 ## Install
 
-If `freee` command is not found, use `npx @yamitzky/freee` instead.
+If `freee` command is not found, ask the user to install the Go binary from this repository's GitHub Releases or build it with `go build -o freee .`.
 
 ## Authentication
 
 `freee auth login` to authenticate (opens browser).
+For remote shells, use `freee auth login --remote` or `freee configure --remote` and set up port forwarding first:
+`ssh -L 54321:127.0.0.1:54321 <user>@<remote-host>`.
+Use `--no-open` when the CLI should print the auth URL without opening a browser.
 Tokens are auto-refreshed. If 401 error occurs, run `freee auth login` again.
 
 ## API Calls
@@ -32,6 +35,8 @@ Tokens are auto-refreshed. If 401 error occurs, run `freee auth login` again.
 ```bash
 freee accounting get deals limit==10
 freee accounting post deals -d '{"type":"income","issue_date":"2025-01-15","details":[{"tax_code":1,"amount":10000}]}'
+freee accounting post deals -d @body.json
+cat body.json | freee accounting post deals -d -
 freee accounting delete deals/123
 ```
 

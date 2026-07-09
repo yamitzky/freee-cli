@@ -1,159 +1,146 @@
-# @yamitzky/freee
+# freee CLI
 
 freee API を AI エージェントから操作するための CLI & Agent Skill です。
 
-[freee/freee-mcp](https://github.com/freee/freee-mcp) を元に、MCP サーバーを廃止して CLI + Agent Skill アーキテクチャに再構築した非公式フォークです。
+## このリポジトリについて
 
-[![npm version](https://badge.fury.io/js/%40yamitzky%2Ffreee.svg)](https://www.npmjs.com/package/@yamitzky/freee)
+これは個人的な私家版です。freee 公式のプロダクトではありません。
 
-> Note: このプロジェクトは非公式フォークです。また、CLIの作者は会計APIしか使っておらず、十分なテストを行っていません。
+元々は [freee/freee-mcp](https://github.com/freee/freee-mcp) をもとに、MCP サーバーではなく CLI + Agent Skill として使うために再構成したものです。その後、npm/Bun/Node.js への依存を減らして単一バイナリで扱えるようにするため、Codex に依頼して TypeScript 実装から Go 実装へ移植しました。
 
-## 特徴
+実利用での検証はかなり限定的です。作者自身も一部の会計 API を試している程度で、会計 API 全体を網羅的に確認しているわけではなく、人事労務・請求書・工数管理・販売 API についてはほぼ未検証です。利用する場合は、実行前にリクエスト内容と freee 側の結果を必ず確認してください。
 
-- freee CLI: シェルから直接 freee API を操作（トークン効率の高いコンパクト出力）
-- Agent Skill: CLI の使い方をガイドするスキルを提供
-- 複数 API 対応: 会計・人事労務・請求書・工数管理・販売の5つの freee API をサポート
-- OAuth 2.0 + PKCE: セキュアな認証フロー、トークン自動更新
+## できること
 
-## SKILL と CLI の連携の流れ
+- Go 単一バイナリ: Node.js、Bun、npm install 不要
+- freee CLI: シェルから直接 freee API を操作
+- Agent Skill: CLI の使い方をガイドするスキルを同梱
+- 複数 API 対応: 会計・人事労務・請求書・工数管理・販売の5つの freee API
+- OAuth 2.0 + PKCE: 認証フローとトークン自動更新
+- OpenAPI 埋め込み: `ls`、`--help`、`--spec` はバイナリ単体で動作
 
-Claude Code では、SKILL（API リファレンス）と CLI（API 呼び出し）を組み合わせて利用します。
+## インストール
 
-```mermaid
-sequenceDiagram
-    participant User as ユーザー
-    participant Claude as Claude Code
-    participant Skill as Agent Skill<br/>(API リファレンス)
-    participant CLI as freee CLI<br/>(ローカル)
-    participant API as freee API
+### GitHub Releases から取得
 
-    User->>Claude: リクエスト<br/>「取引一覧を取得して」
-
-    Note over Claude,Skill: 1. SKILL からリファレンスを取得
-    Claude->>Skill: freee-cli-skill 呼び出し
-    Skill-->>Claude: API リファレンス注入<br/>(エンドポイント、パラメータ仕様)
-
-    Note over Claude,CLI: 2. CLI で API を実行
-    Claude->>CLI: freee accounting get deals<br/>type==income limit==10
-
-    Note over CLI,API: 3. freee API への通信
-    CLI->>API: GET /api/1/deals<br/>Authorization: Bearer xxx
-    API-->>CLI: JSON レスポンス
-
-    CLI-->>Claude: コンパクトなテーブル出力
-    Claude-->>User: 結果を整形して表示
-```
-
-この仕組みにより：
-- SKILL: 必要な API リファレンスを段階的にコンテキストに注入（コンテキスト効率化）
-- CLI: 認証・リクエスト検証・API 呼び出しを担当（コンパクト出力でトークン効率化）
-
-## クイックスタート
-
-### 1. freee アプリケーションの登録
-
-[freee アプリストア](https://app.secure.freee.co.jp/developers) で新しいアプリを作成:
-
-- コールバックURL: `http://127.0.0.1:54321/callback`
-- Client ID と Client Secret を取得
-- 必要な権限にチェック
-
-### 2. セットアップ
+リリースページから OS/CPU に合う `freee` バイナリをダウンロードし、PATH の通った場所へ配置してください。
 
 ```bash
-npx @yamitzky/freee configure
+chmod +x freee
+./freee --help
 ```
 
-対話式ウィザードが認証情報の設定、OAuth認証、事業所選択を行います。
-
-### 3. CLI を使う
+### ソースからビルド
 
 ```bash
-npm install -g @yamitzky/freee
-# または
-bun install -g @yamitzky/freee
-
-freee auth status              # 認証状態を確認
-freee accounting ls            # エンドポイント一覧
-freee accounting get deals     # 取引一覧を取得
-freee --help                   # ヘルプ
+go build -trimpath -ldflags "-s -w -X main.version=$(cat VERSION)" -o freee .
+./freee --help
 ```
 
-## Agent Skill のインストール
+## セットアップ
 
-コーディングエージェント（Claude Code, Cursor, OpenCode など）で API リファレンス付きスキルを利用する場合は、[skills](https://www.npmjs.com/package/skills) でインストールできます。
+freee アプリストアで新しいアプリケーションを作成し、コールバック URL に以下を登録します。
+
+```text
+http://127.0.0.1:54321/callback
+```
+
+その後、CLI で認証と事業所選択を行います。
 
 ```bash
-npx skills add yamitzky/freee-cli
+freee configure
 ```
 
-## freee CLI コマンド
+設定は `~/.config/freee-mcp/config.json`、トークンは `~/.config/freee-mcp/tokens.json` に保存されます。どちらも owner read/write の権限で作成されます。
 
-### 認証・事業所
+### リモート環境でのセットアップ
 
-| コマンド | 説明 |
-|---------|------|
-| `freee auth login` | OAuth 認証 |
-| `freee auth status` | 認証状態を確認 |
-| `freee auth logout` | ログアウト |
-| `freee company ls` | 事業所一覧 |
-| `freee company set <id>` | 操作対象の事業所を設定 |
-| `freee company current` | 現在の事業所を表示 |
-
-### API 操作
-
-| コマンド | 説明 |
-|---------|------|
-| `freee <service> ls [filter]` | エンドポイント一覧 |
-| `freee <service> get <path> key==val` | クエリ付き GET |
-| `freee <service> post <path> key=val` | POST リクエスト |
-| `freee <service> post receipts <file>` | ファイルアップロード |
-| `freee <service> put <path> -d '{}'` | PUT リクエスト |
-| `freee <service> delete <path>` | DELETE リクエスト |
-| `freee <service> <path> --help` | メソッド一覧を表示 |
-| `freee <service> get <path> --help` | パラメータのドキュメント |
-| `freee <service> get <path> --help --response` | レスポンスも含めて表示 |
-| `freee <service> get <path> --spec` | 生の OpenAPI スキーマ |
-
-service: accounting, hr, invoice, pm, sm
-
-### company_id の取り扱い
-
-`company_id` は現在の事業所が自動的に使用されます。明示的に指定すると別の事業所を操作できます。
-
-- 事業所の確認: `freee company current`
-- 事業所の切り替え: `freee company set <id>`
-
-## 開発者向け
+SSH先、Dev Container、Codespaces などでCLIを実行する場合、ブラウザ側の `127.0.0.1` とCLI側の `127.0.0.1` が別になるため、ポート転送が必要です。
 
 ```bash
-git clone https://github.com/yamitzky/freee-cli.git
-cd freee-cli
-bun install
-
-bun run dev           # 開発サーバー（ウォッチモード）
-bun run build         # ビルド
-bun run typecheck    # 型チェック
-bun run lint          # リント
-bun run test:run      # テスト
+ssh -L 54321:127.0.0.1:54321 user@remote-host
+freee configure --remote
 ```
 
-### 技術スタック
+`--remote` はブラウザを自動起動せず、Port Forwarding の案内と認証URLを表示します。ブラウザを開かずURL表示だけにしたい場合は `--no-open` を使えます。
 
-TypeScript / OAuth 2.0 + PKCE / Zod / Bun
+```bash
+freee configure --no-open
+freee auth login --remote
+```
 
-### アーキテクチャ詳細
+freee アプリのコールバック URL は通常どおり以下を登録してください。
 
-プロジェクトのアーキテクチャ、内部構造、開発ガイドラインについては [CLAUDE.md](./CLAUDE.md) を参照してください。
+```text
+http://127.0.0.1:54321/callback
+```
 
-## License / ライセンス
+## 使い方
+
+```bash
+freee auth status
+freee company ls
+freee company set <company_id>
+
+freee accounting ls
+freee accounting get deals
+freee accounting get deals limit==10
+freee accounting post deals -d '{"issue_date":"2026-01-01"}'
+freee accounting post deals -d @body.json
+cat body.json | freee accounting post deals -d -
+freee accounting get deals --json
+```
+
+service は `accounting`, `hr`, `invoice`, `pm`, `sm` を指定できます。
+
+### API ドキュメント
+
+```bash
+freee accounting deals --help
+freee accounting get deals --help
+freee accounting get deals --help --response
+freee accounting get deals --spec
+```
+
+### 入力記法
+
+| 記法 | 用途 |
+| --- | --- |
+| `key==val` | クエリパラメータ |
+| `key=val` | ボディパラメータ（文字列） |
+| `key:=json` | ボディパラメータ（JSON値） |
+| `-d '{}'` | JSONボディを直接指定 |
+| `-d @file.json` | JSONボディをファイルから読み込み |
+| `-d -` | JSONボディを標準入力から読み込み |
+| `--json` | レスポンスを生JSONで表示 |
+| `--max=N` | コンパクト出力の表示件数 |
+| `--verbose` | リクエストURLとボディを stderr に表示 |
+
+`company_id` は現在の事業所が自動的に使用されます。
+
+## Agent Skill
+
+`skills/freee-cli-skill` に Agent Skill を同梱しています。利用するエージェントのスキル配置先へこのディレクトリを登録してください。
+
+## 開発
+
+```bash
+go test ./...
+go build -o freee .
+```
+
+サンドボックス環境などホームディレクトリに Go キャッシュを書けない場合:
+
+```bash
+GOCACHE=/tmp/freee-go-build GOMODCACHE=/tmp/freee-go-mod go test ./...
+```
+
+## リリース
+
+Git タグ `vX.Y.Z` を push すると GitHub Actions が主要 OS/CPU 向けのバイナリと checksums を作成し、GitHub Release に添付します。
+
+## License
 
 このフォークには、freee K.K. による [freee/freee-mcp](https://github.com/freee/freee-mcp) のコードが含まれており、当該コードは Apache License 2.0 に基づいて提供されています。法令上許容される限りにおいて、私がこのフォークに加えた独自の変更および追加部分については、著作権が発生するとは考えておらず、CC0 1.0 に基づき、著作権その他の関連する権利を放棄します。
 
-また、APIの利用については[freee API 利用規約](https://app.secure.freee.co.jp/terms-freee-api.html) に準拠します。
-
-## 関連リンク
-
-- [フォーク元: freee/freee-mcp](https://github.com/freee/freee-mcp) -- オリジナルの MCP サーバー実装
-- [freee API ドキュメント](https://developer.freee.co.jp/docs)
-- [freee を CLI から操作するツールと Agent Skill を作り、トークン効率を75％改善した](https://zenn.dev/yamitzky/articles/94c5e2264403bb)
+API の利用については [freee API 利用規約](https://app.secure.freee.co.jp/terms-freee-api.html) に準拠します。

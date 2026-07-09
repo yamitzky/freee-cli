@@ -1,4 +1,13 @@
-# freee-mcp
+# freee CLI
+
+## 0.3.0
+
+### Minor Changes
+
+- Codex に依頼して TypeScript 実装から Go 単一バイナリの CLI へ移植
+- OpenAPI スキーマを `go:embed` でバイナリに埋め込み、`ls`、`--help`、`--spec` をランタイムファイル依存なしで実行可能に変更
+- GitHub Actions を Go のテスト・ビルド・GitHub Release 配布へ更新
+- npm/Bun/Changesets/Vitest/Biome など Node 系ツールチェーンを削除
 
 ## 0.2.1
 
